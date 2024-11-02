@@ -6,63 +6,46 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXContainerItemProxy section */
-		1535DE712CD5A7B5005EEEAF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1535DE582CD5A7B2005EEEAF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 1535DE5F2CD5A7B2005EEEAF;
-			remoteInfo = Events;
-		};
-		1535DE7B2CD5A7B5005EEEAF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1535DE582CD5A7B2005EEEAF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 1535DE5F2CD5A7B2005EEEAF;
-			remoteInfo = Events;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		1535DE602CD5A7B2005EEEAF /* Events.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Events.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1535DE702CD5A7B5005EEEAF /* EventsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EventsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		1535DE7A2CD5A7B5005EEEAF /* EventsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EventsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		15E2715D2CD607B2002E061B /* Exceptions for "Events" folder in "Events" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"UI/Extensions/Color+Extensions.swift",
+				"UI/Modfiers/View+Lifecycle.swift",
+			);
+			target = 1535DE5F2CD5A7B2005EEEAF /* Events */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		15E2715E2CD607B2002E061B /* Exceptions for "Events" folder in "Copy Bundle Resources" phase from "Events" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 1535DE5E2CD5A7B2005EEEAF /* Resources */;
+			membershipExceptions = (
+				"UI/Extensions/Color+Extensions.swift",
+				"UI/Modfiers/View+Lifecycle.swift",
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		1535DE622CD5A7B2005EEEAF /* Events */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				15E2715D2CD607B2002E061B /* Exceptions for "Events" folder in "Events" target */,
+				15E2715E2CD607B2002E061B /* Exceptions for "Events" folder in "Copy Bundle Resources" phase from "Events" target */,
+			);
 			path = Events;
-			sourceTree = "<group>";
-		};
-		1535DE732CD5A7B5005EEEAF /* EventsTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = EventsTests;
-			sourceTree = "<group>";
-		};
-		1535DE7D2CD5A7B5005EEEAF /* EventsUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = EventsUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		1535DE5D2CD5A7B2005EEEAF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		1535DE6D2CD5A7B5005EEEAF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		1535DE772CD5A7B5005EEEAF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -76,8 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				1535DE622CD5A7B2005EEEAF /* Events */,
-				1535DE732CD5A7B5005EEEAF /* EventsTests */,
-				1535DE7D2CD5A7B5005EEEAF /* EventsUITests */,
+				15E271202CD5AEFD002E061B /* Frameworks */,
 				1535DE612CD5A7B2005EEEAF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -86,10 +68,15 @@
 			isa = PBXGroup;
 			children = (
 				1535DE602CD5A7B2005EEEAF /* Events.app */,
-				1535DE702CD5A7B5005EEEAF /* EventsTests.xctest */,
-				1535DE7A2CD5A7B5005EEEAF /* EventsUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		15E271202CD5AEFD002E061B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -117,52 +104,6 @@
 			productReference = 1535DE602CD5A7B2005EEEAF /* Events.app */;
 			productType = "com.apple.product-type.application";
 		};
-		1535DE6F2CD5A7B5005EEEAF /* EventsTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 1535DE872CD5A7B5005EEEAF /* Build configuration list for PBXNativeTarget "EventsTests" */;
-			buildPhases = (
-				1535DE6C2CD5A7B5005EEEAF /* Sources */,
-				1535DE6D2CD5A7B5005EEEAF /* Frameworks */,
-				1535DE6E2CD5A7B5005EEEAF /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				1535DE722CD5A7B5005EEEAF /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				1535DE732CD5A7B5005EEEAF /* EventsTests */,
-			);
-			name = EventsTests;
-			packageProductDependencies = (
-			);
-			productName = EventsTests;
-			productReference = 1535DE702CD5A7B5005EEEAF /* EventsTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		1535DE792CD5A7B5005EEEAF /* EventsUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 1535DE8A2CD5A7B5005EEEAF /* Build configuration list for PBXNativeTarget "EventsUITests" */;
-			buildPhases = (
-				1535DE762CD5A7B5005EEEAF /* Sources */,
-				1535DE772CD5A7B5005EEEAF /* Frameworks */,
-				1535DE782CD5A7B5005EEEAF /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				1535DE7C2CD5A7B5005EEEAF /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				1535DE7D2CD5A7B5005EEEAF /* EventsUITests */,
-			);
-			name = EventsUITests;
-			packageProductDependencies = (
-			);
-			productName = EventsUITests;
-			productReference = 1535DE7A2CD5A7B5005EEEAF /* EventsUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -176,14 +117,6 @@
 					1535DE5F2CD5A7B2005EEEAF = {
 						CreatedOnToolsVersion = 16.0;
 					};
-					1535DE6F2CD5A7B5005EEEAF = {
-						CreatedOnToolsVersion = 16.0;
-						TestTargetID = 1535DE5F2CD5A7B2005EEEAF;
-					};
-					1535DE792CD5A7B5005EEEAF = {
-						CreatedOnToolsVersion = 16.0;
-						TestTargetID = 1535DE5F2CD5A7B2005EEEAF;
-					};
 				};
 			};
 			buildConfigurationList = 1535DE5B2CD5A7B2005EEEAF /* Build configuration list for PBXProject "Events" */;
@@ -195,34 +128,20 @@
 			);
 			mainGroup = 1535DE572CD5A7B2005EEEAF;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1535DE612CD5A7B2005EEEAF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				1535DE5F2CD5A7B2005EEEAF /* Events */,
-				1535DE6F2CD5A7B5005EEEAF /* EventsTests */,
-				1535DE792CD5A7B5005EEEAF /* EventsUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		1535DE5E2CD5A7B2005EEEAF /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		1535DE6E2CD5A7B5005EEEAF /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		1535DE782CD5A7B5005EEEAF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -239,34 +158,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		1535DE6C2CD5A7B5005EEEAF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		1535DE762CD5A7B5005EEEAF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		1535DE722CD5A7B5005EEEAF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 1535DE5F2CD5A7B2005EEEAF /* Events */;
-			targetProxy = 1535DE712CD5A7B5005EEEAF /* PBXContainerItemProxy */;
-		};
-		1535DE7C2CD5A7B5005EEEAF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 1535DE5F2CD5A7B2005EEEAF /* Events */;
-			targetProxy = 1535DE7B2CD5A7B5005EEEAF /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1535DE822CD5A7B5005EEEAF /* Debug */ = {
@@ -446,78 +338,6 @@
 			};
 			name = Release;
 		};
-		1535DE882CD5A7B5005EEEAF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = K496M4V69T;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.brunoporciuncula.EventsTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Events.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Events";
-			};
-			name = Debug;
-		};
-		1535DE892CD5A7B5005EEEAF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = K496M4V69T;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.brunoporciuncula.EventsTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Events.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Events";
-			};
-			name = Release;
-		};
-		1535DE8B2CD5A7B5005EEEAF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = K496M4V69T;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.brunoporciuncula.EventsUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Events;
-			};
-			name = Debug;
-		};
-		1535DE8C2CD5A7B5005EEEAF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = K496M4V69T;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.brunoporciuncula.EventsUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Events;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -535,24 +355,6 @@
 			buildConfigurations = (
 				1535DE852CD5A7B5005EEEAF /* Debug */,
 				1535DE862CD5A7B5005EEEAF /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		1535DE872CD5A7B5005EEEAF /* Build configuration list for PBXNativeTarget "EventsTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				1535DE882CD5A7B5005EEEAF /* Debug */,
-				1535DE892CD5A7B5005EEEAF /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		1535DE8A2CD5A7B5005EEEAF /* Build configuration list for PBXNativeTarget "EventsUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				1535DE8B2CD5A7B5005EEEAF /* Debug */,
-				1535DE8C2CD5A7B5005EEEAF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
