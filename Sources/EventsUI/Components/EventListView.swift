@@ -10,7 +10,7 @@ import EventsDomain
 import SwiftUI
 
 public struct EventListView: View {
-    @Binding public var events: [Event]
+    @MainActor @Binding public var events: [Event]
 
     public var body: some View {
         ScrollViewReader { scrollViewProxy in
@@ -27,10 +27,14 @@ public struct EventListView: View {
                 }
                 .padding(.vertical)
                 .onAppear {
-                    scrollViewProxy.scrollTo("bottom", anchor: .bottom)
+                    DispatchQueue.main.async {
+                        scrollViewProxy.scrollTo("bottom", anchor: .bottom)
+                    }
                 }
                 .onChange(of: events, initial: true) {
-                    scrollViewProxy.scrollTo("bottom", anchor: .bottom)
+                    DispatchQueue.main.async {
+                        scrollViewProxy.scrollTo("bottom", anchor: .bottom)
+                    }
                 }
             }
             .background(Color.dynamicBackground.ignoresSafeArea())

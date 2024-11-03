@@ -9,14 +9,15 @@ import EventsCommons
 import EventsDomain
 import SwiftUI
 
+@MainActor
 public struct EventRow: View {
     public let event: Event
 
     public var body: some View {
         HStack {
-            Image(systemName: event.icon)  // Display the icon on the left
+            Image(systemName: event.icon)
                 .font(.title2)
-                .foregroundColor(.blue)  // Adjust color as needed
+                .foregroundColor(.blue)
                 .padding(.trailing, 8)
 
             VStack(alignment: .leading) {
