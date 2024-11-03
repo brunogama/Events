@@ -43,8 +43,6 @@ public class EventSender: @unchecked Sendable {
 
     @MainActor
     private func fakeActionProcessing(_ registerState: RegisterState) {
-        defer { lock.unlock() }
-        lock.lock()
         let eventsSimulation = [
             Event.startProcessing,
             .loading,
@@ -62,8 +60,6 @@ public class EventSender: @unchecked Sendable {
     }
 
     public func createPublisher(for viewId: String) -> AnyPublisher<Event, Never> {
-        defer { lock.unlock() }
-        lock.lock()
         Logger.info("Binding no id`1 \(viewId)")
         return
             stateSubject
@@ -78,34 +74,24 @@ public class EventSender: @unchecked Sendable {
 
     public func registerActiveView(_ viewId: String) {
         Logger.info("Adicionando a lista de subscription \(viewId)")
-        addActiveView(viewId)
+        lock.lock()
+        activeViews.insert(viewId)
+        lock.unlock()
     }
 
     public func unregisterView(_ viewId: String) {
         Logger.info("Removendo da lista de subscription \(viewId)")
-        removeActiveView(viewId)
+        lock.lock()
+        activeViews.remove(viewId)
+        lock.unlock()
     }
 
     private func isViewActive(_ viewId: String) -> Bool {
-        getactiveViews().contains(viewId)
-    }
-    
-    private func removeActiveView(_ viewId: String) {
-        defer { lock.unlock() }
+        let result: Bool
         lock.lock()
-        activeViews.remove(viewId)
-    }
-    
-    private func addActiveView(_ viewId: String) {
-        defer { lock.unlock() }
-        lock.lock()
-        activeViews.insert(viewId)
-    }
-    
-    private func getactiveViews() -> Set<String> {
-        defer { lock.unlock() }
-        lock.lock()
-        return activeViews
+        result = activeViews.contains(viewId)
+        lock.unlock()
+        return result
     }
 
     private func delay(

@@ -35,7 +35,6 @@ public final class Logger {
     private let category: String
     private let osLog: OSLog
     private let queue: DispatchQueue
-    private let lock = NSLock()
 
     private static let shared = Logger(subsystem: Constants.bunndle, category: "General")
 
@@ -54,8 +53,6 @@ public final class Logger {
         function: String = #function
     ) {
         #if DEBUG
-        shared.lock.lock()
-        defer { shared.lock.unlock() }
             let file = (fileName as NSString).lastPathComponent
             let timestamp = Date().ISO8601Format()
 
