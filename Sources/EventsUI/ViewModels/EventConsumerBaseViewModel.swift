@@ -15,9 +15,9 @@ open class EventConsumerBaseViewModel: EventConsumerProtocol, ObservableObject {
     public var cancellables: Set<AnyCancellable> = []
     public var action: Action { fatalError("should override") }
 
-    @Published public var receivedValues: [Event] = []
-    @Published public var receivedValue: Event = .idle
-    @Published public var isProcessing: Bool = false
+    @MainActor @Published public var receivedValues: [Event] = []
+    @MainActor @Published public var receivedValue: Event = .idle
+    @MainActor @Published public var isProcessing: Bool = false
     public var emitter: EventSender?
     public var title: String { "Base" }
     public var buttonTitle: String { "Send Event" }

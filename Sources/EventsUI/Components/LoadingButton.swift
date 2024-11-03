@@ -102,10 +102,3 @@ struct LoadingButton: View {
 //    }
 //}
 //
-//#if DEBUG
-//#if canImport(SwiftUIPreview)
-//#Preview {
-//    <#code#>
-}
-#endif
-#endif

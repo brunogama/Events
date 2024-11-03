@@ -45,7 +45,13 @@ extension EventObservableViewProtocol {
     }
 
     public func StateFullButton() -> some View {
-        LoadingButton(title: viewModel.title) {
+        LoadingButton(
+            title: viewModel.title,
+            isLoading: Binding<Bool>(
+                get: { viewModel.isProcessing },
+                set: { _ in }
+            )
+        ) {
             viewModel.buttonTap()
         }
     }
