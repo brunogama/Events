@@ -246,6 +246,7 @@ extension EventConsumerProtocol {
 
     public func unregisterView(_ viewId: String) {
         emitter?.unregisterView(viewId)
+        unbind()
     }
 
     public func appendEvent(_ value: Event) {
