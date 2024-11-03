@@ -4,7 +4,6 @@ import PackageDescription
 let package = Package(
     name: "Events",
     platforms: [.iOS(.v17)],
-    providers: [.brew(["swiftlint/swiftlint"])],
     products: [
         .library(
             name: "EventsCommons",
@@ -35,7 +34,6 @@ let package = Package(
             name: "EventsDomain",
             dependencies: [
                 .target(name: "EventsCommons"),
-                .target(name: "EventsServices")
             ],
             path: "Sources/EventsDomain"
         ),
