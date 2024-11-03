@@ -8,7 +8,7 @@
 import SwiftUI
 
 public protocol IdentifiableView: View {
-    var viewId: String { get }
+    @MainActor var viewId: String { get }
 }
 
 extension IdentifiableView {
