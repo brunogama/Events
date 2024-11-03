@@ -15,7 +15,7 @@ protocol EventObservableViewProtocol: HasViewModelEventConsumerProtocol, Identif
 
 extension EventObservableViewProtocol {
 
-    public func Content() -> some View {
+    @MainActor public func Content() -> some View {
         VStack {
             Header()
             EventList()
@@ -24,7 +24,7 @@ extension EventObservableViewProtocol {
         }
     }
 
-    public func EventList() -> some View {
+    @MainActor public func EventList() -> some View {
         EventListView(
             events: Binding<[Event]>(
                 get: { viewModel.receivedValues },
@@ -33,7 +33,7 @@ extension EventObservableViewProtocol {
         )
     }
 
-    public func Header() -> some View {
+    @MainActor public func Header() -> some View {
         VStack {
             Image(systemName: viewModel.receivedValue.icon)
                 .font(.system(size: 60))
@@ -44,7 +44,7 @@ extension EventObservableViewProtocol {
         }
     }
 
-    public func StateFullButton() -> some View {
+    @MainActor public func StateFullButton() -> some View {
         LoadingButton(
             title: viewModel.title,
             isLoading: Binding<Bool>(

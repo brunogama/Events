@@ -203,6 +203,7 @@ import SwiftUI
 //    }
 //}
 
+@MainActor
 public protocol EventConsumerProtocol: AnyObject, ObservableObject {
     var event: Event { get }
     var cancellables: Set<AnyCancellable> { get set }
@@ -254,8 +255,7 @@ extension EventConsumerProtocol {
         receivedValue = value
         receivedValues.append(value)
     }
-
-    @MainActor
+    @MainActor 
     public func proccessAction(_ action: Action) {
         emitter?.proccessAction(action)
     }

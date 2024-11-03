@@ -9,13 +9,12 @@ import Combine
 import EventsCommons
 import SwiftUI
 
-@MainActor
 public struct LoadingButton: View {
     public typealias ButtonAction = (() -> Void)?
 
     public let title: String
     @Binding public var isLoading: Bool
-    public let action: ButtonAction
+    @MainActor public let action: ButtonAction
 
     public init(
         title: String,
