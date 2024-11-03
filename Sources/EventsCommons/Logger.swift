@@ -56,7 +56,7 @@ public final class Logger {
             let file = (fileName as NSString).lastPathComponent
             let timestamp = Date().ISO8601Format()
 
-            shared.queue.sync {
+            shared.queue.async {
                 os_log(
                     level.osLogType,
                     log: Self.shared.osLog,
@@ -109,6 +109,6 @@ public final class Logger {
     }
 
     deinit {
-        queue.sync {}
+        queue.async {}
     }
 }
