@@ -5,13 +5,13 @@
 //  Created by Bruno on 01/11/24.
 //
 
-import Foundation
 import Combine
 import EventsCommons
 import EventsDomain
+import Foundation
 
 open class EventConsumerBaseViewModel: EventConsumerProtocol, ObservableObject {
-    
+
     public var cancellable: AnyCancellable?
     public var cancellables: Set<AnyCancellable> = []
     public var action: Action { fatalError("should override") }
@@ -20,10 +20,9 @@ open class EventConsumerBaseViewModel: EventConsumerProtocol, ObservableObject {
         case appeared
         case disappeared
     }
-    
+
     private let lifecycle = PassthroughSubject<ViewLifecycle, Never>()
 
-    
     @Published public var receivedValues: [Event] = []
     @Published public var receivedValue: Event = .idle
     @Published public var isProcessing: Bool = false
@@ -33,21 +32,23 @@ open class EventConsumerBaseViewModel: EventConsumerProtocol, ObservableObject {
     public var image: String { "globe" }
     public init(emitter: EventSender) {
         self.emitter = emitter
-//        self.eventManager = EventStateManager(emitter)
-//        bind(to: emitter)
+        //        self.eventManager = EventStateManager(emitter)
+        //        bind(to: emitter)
         setupExtraSubscriptions(emitter)
     }
-    
+
     private func setupExtraSubscriptions(_ emitter: EventSender) {
-        let visibilityState = lifecycle
+        let visibilityState =
+            lifecycle
             .scan(false) { isVisible, event in
                 switch event {
                 case .appeared: return true
                 case .disappeared: return false
                 }
-            }.removeDuplicates()
+            }
+            .removeDuplicates()
             .share()
-        
+
         emitter.eventSubject
             .combineLatest(visibilityState)
             .filter { _, isVisble in isVisble }
@@ -58,15 +59,15 @@ open class EventConsumerBaseViewModel: EventConsumerProtocol, ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in
                 self?.appendEvent($0)
-            }.store(in: &cancellables)
+            }
+            .store(in: &cancellables)
     }
-    
+
     public func viewDidAppear() {
         lifecycle.send(.appeared)
     }
-    
+
     public func viewDidDisappear() {
         lifecycle.send(.disappeared)
     }
 }
-

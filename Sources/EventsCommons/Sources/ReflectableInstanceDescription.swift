@@ -32,9 +32,9 @@ private protocol ValueDescriptionHandler: Sendable {
     func handle(_ value: Any, builder: ValueDescriptionBuilder) -> String
 }
 
-package final class ValueDescriptionBuilder: Sendable  {
+package final class ValueDescriptionBuilder: Sendable {
     static let shared = ValueDescriptionBuilder()
-    
+
     fileprivate let handlers: [ValueDescriptionHandler] = [
         OptionalHandler(),
         CollectionHandler(),
@@ -43,7 +43,7 @@ package final class ValueDescriptionBuilder: Sendable  {
         StructClassHandler(),
         DefaultHandler(),
     ]
-    
+
     let queue = DispatchQueue(label: "ValueDescriptionBuilder")
 
     private init() {}
@@ -63,7 +63,7 @@ package final class ValueDescriptionBuilder: Sendable  {
 
 // MARK: - Handlers
 
-fileprivate struct OptionalHandler: ValueDescriptionHandler {
+private struct OptionalHandler: ValueDescriptionHandler {
     func canHandle(_ displayStyle: Mirror.DisplayStyle?) -> Bool {
         displayStyle == .optional
     }
@@ -79,7 +79,7 @@ fileprivate struct OptionalHandler: ValueDescriptionHandler {
     }
 }
 
-fileprivate struct CollectionHandler: ValueDescriptionHandler {
+private struct CollectionHandler: ValueDescriptionHandler {
     func canHandle(_ displayStyle: Mirror.DisplayStyle?) -> Bool {
         displayStyle == .collection || displayStyle == .set
     }
@@ -91,7 +91,7 @@ fileprivate struct CollectionHandler: ValueDescriptionHandler {
     }
 }
 
-fileprivate struct DictionaryHandler: ValueDescriptionHandler {
+private struct DictionaryHandler: ValueDescriptionHandler {
     func canHandle(_ displayStyle: Mirror.DisplayStyle?) -> Bool {
         displayStyle == .dictionary
     }
@@ -110,7 +110,7 @@ fileprivate struct DictionaryHandler: ValueDescriptionHandler {
     }
 }
 
-fileprivate struct EnumHandler: ValueDescriptionHandler {
+private struct EnumHandler: ValueDescriptionHandler {
     func canHandle(_ displayStyle: Mirror.DisplayStyle?) -> Bool {
         displayStyle == .enum
     }
@@ -131,7 +131,7 @@ fileprivate struct EnumHandler: ValueDescriptionHandler {
     }
 }
 
-fileprivate struct StructClassHandler: ValueDescriptionHandler {
+private struct StructClassHandler: ValueDescriptionHandler {
     func canHandle(_ displayStyle: Mirror.DisplayStyle?) -> Bool {
         displayStyle == .struct || displayStyle == .class
     }
@@ -149,7 +149,7 @@ fileprivate struct StructClassHandler: ValueDescriptionHandler {
     }
 }
 
-fileprivate struct DefaultHandler: ValueDescriptionHandler {
+private struct DefaultHandler: ValueDescriptionHandler {
     func canHandle(_ displayStyle: Mirror.DisplayStyle?) -> Bool {
         true
     }

@@ -11,7 +11,7 @@
 //    let title: String
 //    @Binding var isLoading: Bool
 //    let action: () -> Void
-//    
+//
 //    var body: some View {
 //        Button(action: {
 //            if !isLoading {
@@ -25,7 +25,7 @@
 //                    .opacity(0)
 //                    .padding()
 //                    .frame(maxWidth: .infinity)
-//                
+//
 //                if isLoading {
 //                    CustomLoadingIndicator() // Use the custom loading indicator
 //                        .frame(width: 24, height: 24)
@@ -51,11 +51,11 @@ import SwiftUI
 
 struct LoadingButton: View {
     typealias ButtonAction = (() -> Void)?
-    
+
     let title: String
     @Binding var isLoading: Bool
     let action: ButtonAction
-    
+
     init(
         title: String,
         isLoading: Binding<Bool> = .constant(false),
@@ -65,7 +65,7 @@ struct LoadingButton: View {
         self._isLoading = isLoading
         self.action = action
     }
-    
+
     var body: some View {
         Button(action: {
             if !isLoading {
@@ -79,12 +79,13 @@ struct LoadingButton: View {
                     .opacity(0)
                     .padding()
                     .frame(maxWidth: .infinity)
-                
+
                 if isLoading {
-                    ProgressView() // Simple loading spinner
+                    ProgressView()  // Simple loading spinner
                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                        .scaleEffect(1.2) // Makes spinner slightly larger
-                } else {
+                        .scaleEffect(1.2)  // Makes spinner slightly larger
+                }
+                else {
                     Text(title)
                         .font(.headline)
                         .padding()
@@ -101,33 +102,33 @@ struct LoadingButton: View {
 }
 
 #if DEBUG
-struct ButtonDebugWrapper<Content: View>: View {
-    let content: Content
-    @State private var isTapped = false
-    
-    init(@ViewBuilder content: () -> Content) {
-        self.content = content()
-    }
-    
-    var body: some View {
-        content
-            .border(Color.red) // Visual boundary
-            .overlay(
-                Rectangle()
-                    .stroke(isTapped ? Color.green : Color.clear)
-            )
-            .simultaneousGesture(
-                TapGesture()
-                    .onEnded { _ in
-                        print("Debug: Touch detected")
-                        isTapped = true
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                            isTapped = false
+    struct ButtonDebugWrapper<Content: View>: View {
+        let content: Content
+        @State private var isTapped = false
+
+        init(@ViewBuilder content: () -> Content) {
+            self.content = content()
+        }
+
+        var body: some View {
+            content
+                .border(Color.red)  // Visual boundary
+                .overlay(
+                    Rectangle()
+                        .stroke(isTapped ? Color.green : Color.clear)
+                )
+                .simultaneousGesture(
+                    TapGesture()
+                        .onEnded { _ in
+                            print("Debug: Touch detected")
+                            isTapped = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                isTapped = false
+                            }
                         }
-                    }
-            )
+                )
+        }
     }
-}
 #endif
 
 #Preview {

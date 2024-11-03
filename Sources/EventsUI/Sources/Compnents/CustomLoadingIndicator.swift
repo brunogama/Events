@@ -5,13 +5,13 @@
 //  Created by Bruno on 02/11/24.
 //
 
-import SwiftUI
-import EventsDomain
 import EventsCommons
+import EventsDomain
+import SwiftUI
 
 struct CustomLoadingIndicator: View {
     @State private var isAnimating = false
-    
+
     var body: some View {
         ZStack {
             // First Arc
@@ -30,7 +30,7 @@ struct CustomLoadingIndicator: View {
                         .repeatForever(autoreverses: false),
                     value: isAnimating
                 )
-            
+
             // Second Arc
             Circle()
                 .trim(from: 0.5, to: 1.0)

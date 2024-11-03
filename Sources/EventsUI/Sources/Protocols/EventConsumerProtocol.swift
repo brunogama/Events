@@ -5,16 +5,15 @@
 //  Created by Bruno on 02/11/24.
 //
 
-
 import Combine
-import SwiftUI
-import Foundation
-import EventsDomain
 import EventsCommons
+import EventsDomain
+import Foundation
+import SwiftUI
 
 class EventStateManager {
     private var cancellables = Set<AnyCancellable>()
-    
+
     // Expanded state tracking
     struct StateSnapshot {
         var currentEvent: Event
@@ -24,7 +23,7 @@ class EventStateManager {
         var timestamp: Date
         var processingDuration: TimeInterval?
         var consecutiveErrorCount: Int
-        
+
         static var initial: StateSnapshot {
             StateSnapshot(
                 currentEvent: .idle,
@@ -34,13 +33,13 @@ class EventStateManager {
             )
         }
     }
-    
+
     init(_ emitter: EventSender) {
         setupStateTracking(emitter)
         setupErrorTracking(emitter)
         setupProcessingTimeTracking(emitter)
     }
-    
+
     private func setupStateTracking(_ emitter: EventSender) {
         // Main state tracker
         emitter.eventSubject
@@ -48,36 +47,36 @@ class EventStateManager {
                 var newState = state
                 newState.currentEvent = newEvent
                 newState.timestamp = Date()
-                
+
                 switch newEvent {
                 case .idle:
                     newState.isProcessing = false
                     newState.processingDuration = nil
-                    
+
                 case .startProcessing, .loading:
                     newState.isProcessing = true
                     newState.lastError = nil
-                    
+
                 case .willUpdateState(let registerState):
                     newState.isProcessing = true
                     newState.registerState = registerState
-                    
+
                 case .stateUpdated(let registerState):
                     newState.isProcessing = false
                     newState.registerState = registerState
                     newState.consecutiveErrorCount = 0
-                    
+
                 case .currentState(let registerState):
                     newState.isProcessing = false
                     newState.registerState = registerState
                     newState.consecutiveErrorCount = 0
-                    
+
                 case .error(let error):
                     newState.isProcessing = false
                     newState.lastError = error
                     newState.consecutiveErrorCount += 1
                 }
-                
+
                 return newState
             }
             .receive(on: DispatchQueue.main)
@@ -86,13 +85,13 @@ class EventStateManager {
             }
             .store(in: &cancellables)
     }
-    
+
     private func setupErrorTracking(_ emitter: EventSender) {
         // Track error patterns
         emitter.eventSubject
             .scan([]) { (errors: [Error], event: Event) -> [Error] in
                 if case .error(let error) = event {
-                    return (errors + [error]).suffix(3) // Keep last 3 errors
+                    return (errors + [error]).suffix(3)  // Keep last 3 errors
                 }
                 return errors
             }
@@ -102,24 +101,26 @@ class EventStateManager {
             }
             .store(in: &cancellables)
     }
-    
+
     private func setupProcessingTimeTracking(_ emitter: EventSender) {
         // Track processing time
         emitter.eventSubject
             .scan((startTime: Optional<Date>.none, event: Event.idle)) { state, newEvent in
                 var startTime = state.startTime
-                
+
                 if newEvent.isProcessing && startTime == nil {
                     startTime = Date()
-                } else if !newEvent.isProcessing {
+                }
+                else if !newEvent.isProcessing {
                     startTime = nil
                 }
-                
+
                 return (startTime: startTime, event: newEvent)
             }
             .compactMap { state -> TimeInterval? in
                 guard !state.event.isProcessing,
-                      let start = state.startTime else {
+                    let start = state.startTime
+                else {
                     return nil
                 }
                 return Date().timeIntervalSince(start)
@@ -130,46 +131,47 @@ class EventStateManager {
             .store(in: &cancellables)
     }
     // MARK: - State Handlers
-    
-     private func handleStateUpdate(_ state: StateSnapshot) {
-         DispatchQueue.main.async { [weak self] in
-             guard let self = self else { return }
-             // Handle state transitions
-             if state.isProcessing {
-                 print("📍 Processing: \(state.currentEvent.name)")
-             } else {
-                 print("✅ Completed: \(state.currentEvent.name)")
-             }
-             
-             // Handle register state updates
-             if let registerState = state.registerState {
-                 print("📝 Register State Updated: \(registerState)")
-             }
-             
-             // Handle errors with retry logic
-             if let error = state.lastError {
-                 handleError(error, consecutiveErrors: state.consecutiveErrorCount)
-             }
-         }
+
+    private func handleStateUpdate(_ state: StateSnapshot) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            // Handle state transitions
+            if state.isProcessing {
+                print("📍 Processing: \(state.currentEvent.name)")
+            }
+            else {
+                print("✅ Completed: \(state.currentEvent.name)")
+            }
+
+            // Handle register state updates
+            if let registerState = state.registerState {
+                print("📝 Register State Updated: \(registerState)")
+            }
+
+            // Handle errors with retry logic
+            if let error = state.lastError {
+                handleError(error, consecutiveErrors: state.consecutiveErrorCount)
+            }
+        }
     }
-    
+
     private func handleErrorPattern(_ errors: [Error]) {
         if errors.count >= 3 {
             print("⚠️ Warning: Multiple consecutive errors detected")
             // Implement recovery strategy
         }
     }
-    
+
     private func handleProcessingComplete(duration: TimeInterval) {
         if duration > 5.0 {
             print("⚠️ Warning: Processing took longer than expected: \(duration) seconds")
         }
         print("ℹ️ Processing completed in \(String(format: "%.2f", duration)) seconds")
     }
-    
+
     private func handleError(_ error: Error, consecutiveErrors: Int) {
         print("❌ Error: \(error)")
-        
+
         // Implement retry logic based on consecutive errors
         switch consecutiveErrors {
         case 1:
@@ -182,41 +184,40 @@ class EventStateManager {
             break
         }
     }
-    
+
     // MARK: - Recovery Methods
-    
+
     private func retryImmediate() {
-//        eventPublisher.send(.startProcessing)
+        //        eventPublisher.send(.startProcessing)
     }
-    
+
     private func retryWithDelay(seconds: TimeInterval) {
-//        DispatchQueue.main.asyncAfter(deadline: .now() + seconds) { [weak self] in
-//            self?.eventPublisher.send(.startProcessing)
-//        }
+        //        DispatchQueue.main.asyncAfter(deadline: .now() + seconds) { [weak self] in
+        //            self?.eventPublisher.send(.startProcessing)
+        //        }
     }
-    
+
     private func handleCriticalError(_ error: Error) {
         print("🚨 Critical error: Too many retry attempts")
         // Implement recovery strategy or notify user
     }
 }
 
-
 public protocol EventConsumerProtocol: AnyObject, ObservableObject {
     var cancellable: AnyCancellable? { get set }
     var cancellables: Set<AnyCancellable> { get set }
     var action: Action { get }
     var isBeingShown: Bool? { get set }
-    
+
     var receivedValue: Event { get set }
     var isProcessing: Bool { get set }
     var receivedValues: [Event] { get set }
     var emitter: EventSender? { get set }
-//    var eventManager: EventStateManager { get }
+    //    var eventManager: EventStateManager { get }
     var title: String { get }
     var buttonTitle: String { get }
     var renderInputTextField: Bool { get }
-    
+
     func bind(to emitter: EventSender)
     func receivedEvent(_ event: Event)
     func appendEvent(_ value: Event)
@@ -227,14 +228,13 @@ public protocol EventConsumerProtocol: AnyObject, ObservableObject {
     func viewDidDisappear()
 }
 
-public extension EventConsumerProtocol {
-    var title: String { "Base" }
-    var buttonTitle: String { "Send Event" }
-    var renderInputTextField: Bool { false }
-    var action: Action { .passIntro }
-    
+extension EventConsumerProtocol {
+    public var title: String { "Base" }
+    public var buttonTitle: String { "Send Event" }
+    public var renderInputTextField: Bool { false }
+    public var action: Action { .passIntro }
 
-    func bind(to emitter: EventSender) {
+    public func bind(to emitter: EventSender) {
         emitter.eventSubject
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] value in
@@ -243,32 +243,32 @@ public extension EventConsumerProtocol {
             })
             .store(in: &cancellables)
     }
-    
-    func receivedEvent(_ event: Event) {
+
+    public func receivedEvent(_ event: Event) {
         guard let isBeingShown else { return }
         if isBeingShown == false { return }
-//        print("EventConsumerProtocol received: \(event)")
+        //        print("EventConsumerProtocol received: \(event)")
         print("Executing on class \(String(describing: type(of: self))).")
     }
-    
-    func appendEvent(_ value: Event) {
+
+    public func appendEvent(_ value: Event) {
         isProcessing = value.isProcessing
         receivedValue = value
         receivedValues.append(value)
     }
-    
+
     @MainActor
-    func proccessAction(_ action: Action) {
+    public func proccessAction(_ action: Action) {
         emitter?.proccessAction(action)
     }
-    
-    func buttonTap() {
+
+    public func buttonTap() {
         proccessAction(self.action)
     }
-    
-    func unbind() {
-//        cancellable?.cancel()
-//        cancellable = nil
-//        cancellables.removeAll()
+
+    public func unbind() {
+        //        cancellable?.cancel()
+        //        cancellable = nil
+        //        cancellables.removeAll()
     }
 }

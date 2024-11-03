@@ -1,6 +1,6 @@
-import SwiftUI
-import EventsDomain
 import EventsCommons
+import EventsDomain
+import SwiftUI
 
 /// A view modifier that allows to execute code on the lifecycle of a view.
 /// Usage:
@@ -39,4 +39,3 @@ extension View {
         self.modifier(OnDisappearModifier(action: action))
     }
 }
-

@@ -5,10 +5,10 @@
 //  Created by Bruno on 02/11/24.
 //
 
-import SwiftUI
 import Combine
-import EventsDomain
 import EventsCommons
+import EventsDomain
+import SwiftUI
 
 struct EmailView: View {
     @StateObject var viewModel: EmailViewModel
@@ -18,19 +18,21 @@ struct EmailView: View {
         Content()
             .onAppear {
                 viewModel.isBeingShown = true
-            }.onDisappear {
+            }
+            .onDisappear {
                 viewModel.isBeingShown = false
                 viewModel.unbind()
-            }.padding()
+            }
+            .padding()
     }
 }
 
 class EmailViewModel: SMSViewModel {
     override var action: Action { .emailToken(token) }
-    
+
     override var title: String { "EmailView" }
-    
+
     override var textInputCaption: String { "Type SMS Token" }
-    
+
     override var image: String { "envelope.fill" }
 }

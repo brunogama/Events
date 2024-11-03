@@ -5,10 +5,10 @@
 //  Created by Bruno on 02/11/24.
 //
 
-import SwiftUI
 import Combine
-import EventsDomain
 import EventsCommons
+import EventsDomain
+import SwiftUI
 
 struct LivenessView: View {
     @StateObject var viewModel: LivenessViewModel
@@ -18,10 +18,12 @@ struct LivenessView: View {
         Content()
             .onAppear {
                 viewModel.isBeingShown = true
-            }.onDisappear {
+            }
+            .onDisappear {
                 viewModel.isBeingShown = false
                 viewModel.unbind()
-            }.padding()
+            }
+            .padding()
     }
 }
 

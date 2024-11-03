@@ -12,7 +12,7 @@ public struct Response: Codable, Sendable {
     public var message: String
     public var data: Data
     public var code: Int
-    
+
     public init(status: String, message: String, data: Data, code: Int) {
         self.status = status
         self.message = message

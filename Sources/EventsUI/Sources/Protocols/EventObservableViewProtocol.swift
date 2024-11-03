@@ -6,9 +6,9 @@
 //
 
 import Combine
-import SwiftUI
-import EventsDomain
 import EventsCommons
+import EventsDomain
+import SwiftUI
 
 protocol EventObservableViewProtocol: HasViewModelEventConsumerProtocol {
 }

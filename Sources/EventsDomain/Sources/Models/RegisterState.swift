@@ -20,7 +20,7 @@ public enum RegisterState: RawRepresentable, Equatable, Hashable, ReflectableDes
                 .shuffled(using: &random)
                 .map { String($0) }
                 .joined()
-            
+
             return salt
         }()
     }

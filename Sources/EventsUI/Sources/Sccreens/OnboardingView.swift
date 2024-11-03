@@ -5,10 +5,10 @@
 //  Created by Bruno on 01/11/24.
 //
 
-import SwiftUI
 import Combine
-import EventsDomain
 import EventsCommons
+import EventsDomain
+import SwiftUI
 
 struct OnboardingView: View {
     @StateObject var viewModel: OnboardingViewModel
@@ -18,10 +18,12 @@ struct OnboardingView: View {
         Content()
             .onAppear {
                 viewModel.isBeingShown = true
-            }.onDisappear {
+            }
+            .onDisappear {
                 viewModel.isBeingShown = false
                 viewModel.unbind()
-            }.padding()
+            }
+            .padding()
     }
 }
 
@@ -31,4 +33,3 @@ class OnboardingViewModel: EventConsumerBaseViewModel {
     override var image: String { "person.crop.circle.badge.checkmark" }
     var renderInputTextField: Bool { false }
 }
-    

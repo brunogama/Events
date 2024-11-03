@@ -56,4 +56,3 @@ public func makeDefaultHandler<each T, R>() -> (repeat each T) -> R {
         abort()
     }
 }
-

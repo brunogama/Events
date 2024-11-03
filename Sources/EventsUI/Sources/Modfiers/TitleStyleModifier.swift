@@ -5,14 +5,13 @@
 //  Created by Bruno on 02/11/24.
 //
 
-
-import SwiftUI
-import EventsDomain
 import EventsCommons
+import EventsDomain
+import SwiftUI
 
 struct TitleStyleModifier: ViewModifier {
     var title: String
-    
+
     func body(content: Content) -> some View {
         content
             .font(.title)
@@ -27,4 +26,3 @@ extension View {
         self.modifier(TitleStyleModifier(title: title))
     }
 }
-

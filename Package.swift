@@ -11,19 +11,27 @@ enum Products: String, CaseIterable {
     case domain = "EventsDomain"
     case services = "EventsServices"
     case ui = "EventsUI"
+    case example = "Example"
 
-    var path: String { "Sources/\(self.rawValue)/Sources" }
+    var path: String {
+        if case .example = self {
+            return "Example/\(self.rawValue)/Sources"
+        }
+        return "Sources/\(self.rawValue)/Sources"
+    }
 
     var dependencies: [Products] {
         switch self {
+        case .example:
+            [.ui, .domain, .services, .commons]
         case .commons:
-            return []
+            []
         case .ui:
-            return [.domain, .commons]
+            [.domain, .commons]
         case .domain:
-            return [.commons, .services]
+            [.commons, .services]
         case .services:
-            return [.commons]
+            [.commons]
         }
     }
 
@@ -34,6 +42,8 @@ enum Products: String, CaseIterable {
     var libraryTargets: [String] {
         let libraryTarget: [Products] =
             switch self {
+            case .example:
+                [.ui, .domain, .services, .commons]
             case .commons:
                 [.commons]
             case .domain:
@@ -49,7 +59,13 @@ enum Products: String, CaseIterable {
     static var products: [Product] {
         Self.allCases
             .compactMap {
-                .library(
+                if case .example = $0 {
+                    return .executable(
+                        name: $0.rawValue,
+                        targets: $0.libraryTargets
+                    ),
+                }
+                return .library(
                     name: $0.rawValue,
                     type: .static,
                     targets: $0.libraryTargets

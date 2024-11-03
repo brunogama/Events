@@ -6,18 +6,17 @@
 //
 
 import Combine
-import SwiftUI
-import EventsDomain
 import EventsCommons
-
+import EventsDomain
+import SwiftUI
 
 public final class NavigationRouter {
     private let eventSender: EventSender
-    
+
     public init(eventSender: EventSender) {
         self.eventSender = eventSender
     }
-    
+
     @MainActor
     public func navigateTo(
         _ destination: Destination

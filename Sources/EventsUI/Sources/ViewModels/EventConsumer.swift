@@ -14,4 +14,3 @@ final class EventConsumer: EventConsumerBaseViewModel {
         print("EventConsumer received: \(String(describing: value).uppercased())")
     }
 }
-    

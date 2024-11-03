@@ -6,17 +6,17 @@
 //
 
 import Combine
-import Foundation
 import EventsCommons
+import Foundation
 
 public class EventSender: @unchecked Sendable {
 
     let passthroughSubject = CurrentValueSubject<Event, Never>(.idle)
-    
+
     public var eventSubject = CurrentValueSubject<Event, Never>(.idle)
-    
+
     public init() {}
-    
+
     func emit(_ event: Event) {
         eventSubject.send(event)
     }
@@ -66,7 +66,7 @@ public class EventSender: @unchecked Sendable {
         await Task.sleep(seconds: delay)
         closure()
     }
-    
+
     public func resetState() {
         eventSubject.send(.idle)
     }
