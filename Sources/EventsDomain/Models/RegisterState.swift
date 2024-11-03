@@ -33,7 +33,7 @@ public enum RegisterState: RawRepresentable, Equatable, Hashable, ReflectableDes
             return UUID().uuidString.count + instanceDescription.count + (0...Int.max).randomElement()!
         }
 
-        return uuidByteCount + instanceInformationbyteCount
+        return uuidByteCount + instanceInformationbyteCount + saltByteCpunt + uuidByteCount
     }
 
     case none

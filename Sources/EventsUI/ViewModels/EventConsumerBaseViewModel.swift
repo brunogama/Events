@@ -14,7 +14,6 @@ open class EventConsumerBaseViewModel: EventConsumerProtocol, ObservableObject {
     @Published private(set) public var event: Event = .idle
     public var cancellables: Set<AnyCancellable> = []
     public var action: Action { fatalError("should override") }
-
     @MainActor @Published public var receivedValues: [Event] = []
     @MainActor @Published public var receivedValue: Event = .idle
     @MainActor @Published public var isProcessing: Bool = false
@@ -24,42 +23,5 @@ open class EventConsumerBaseViewModel: EventConsumerProtocol, ObservableObject {
     public var image: String { "globe" }
     public init(emitter: EventSender) {
         self.emitter = emitter
-        //        self.eventManager = EventStateManager(emitter)
-        //        bind(to: emitter)
-        //        setupExtraSubscriptions(emitter)
     }
-
-    //    private func setupExtraSubscriptions(_ emitter: EventSender) {
-    //        let visibilityState =
-    //            lifecycle
-    //            .scan(false) { isVisible, event in
-    //                switch event {
-    //                case .appeared: return true
-    //                case .disappeared: return false
-    //                }
-    //            }
-    //            .removeDuplicates()
-    //            .share()
-    //
-    //        emitter.eventSubject
-    //            .combineLatest(visibilityState)
-    //            .filter { _, isVisble in isVisble }
-    //            .map { event, _ in event }
-    //            .removeDuplicates()
-    //            .buffer(size: 5, prefetch: .byRequest, whenFull: .dropOldest)
-    //            .dropFirst()
-    //            .receive(on: DispatchQueue.main)
-    //            .sink { [weak self] in
-    //                self?.appendEvent($0)
-    //            }
-    //            .store(in: &cancellables)
-    //    }
-    //
-    //    public func viewDidAppear() {
-    //        lifecycle.send(.appeared)
-    //    }
-    //
-    //    public func viewDidDisappear() {
-    //        lifecycle.send(.disappeared)
-    //    }
 }

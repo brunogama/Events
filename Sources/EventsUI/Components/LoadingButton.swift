@@ -9,6 +9,7 @@ import Combine
 import EventsCommons
 import SwiftUI
 
+@MainActor
 public struct LoadingButton: View {
     public typealias ButtonAction = (() -> Void)?
 
@@ -16,7 +17,7 @@ public struct LoadingButton: View {
     @Binding public var isLoading: Bool
     public let action: ButtonAction
 
-    public init(
+    @MainActor public init(
         title: String,
         isLoading: Binding<Bool> = .constant(false),
         action: ButtonAction = makeDefaultHandler()

@@ -255,7 +255,6 @@ extension EventConsumerProtocol {
         receivedValues.append(value)
     }
 
-    @MainActor
     public func proccessAction(_ action: Action) {
         emitter?.proccessAction(action)
     }

@@ -20,27 +20,28 @@ public class EventSender: @unchecked Sendable {
         stateSubject.send(event)
     }
 
-    @MainActor
     public func proccessAction(_ action: Action) {
-        switch action {
-        case .passIntro:
-            fakeActionProcessing(.onboarding)
-        case .passOnboarding:
-            fakeActionProcessing(.removeDevices(.mock()))
-        case .passDone:
-            fakeActionProcessing(.onboarding)
-        case .removeDevices(_):
-            fakeActionProcessing(.liveness(.implementationB(.mock())))
-        case .starLiveness:
-            fakeActionProcessing(.sms)
-        case .smsToken:
-            fakeActionProcessing(.email)
-        case .emailToken(_):
-            fakeActionProcessing(.mockDone())
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            switch action {
+            case .passIntro:
+                self.fakeActionProcessing(.onboarding)
+            case .passOnboarding:
+                self.fakeActionProcessing(.removeDevices(.mock()))
+            case .passDone:
+                self.fakeActionProcessing(.onboarding)
+            case .removeDevices(_):
+                self.fakeActionProcessing(.liveness(.implementationB(.mock())))
+            case .starLiveness:
+                self.fakeActionProcessing(.sms)
+            case .smsToken:
+                self.fakeActionProcessing(.email)
+            case .emailToken(_):
+                self.fakeActionProcessing(.mockDone())
+            }
         }
     }
 
-    @MainActor
     private func fakeActionProcessing(_ registerState: RegisterState) {
         let eventsSimulation = [
             Event.startProcessing,
@@ -49,11 +50,11 @@ public class EventSender: @unchecked Sendable {
             .stateUpdated(registerState),
             .currentState(registerState),
         ]
-        Task {
+        Task { @MainActor [weak self] in
+            guard let self else { return }
             for event in eventsSimulation {
-                await delay(event.simulationDelay) { [weak self] in
-                    self?.emit(event)
-                }
+                await Task.delayFor(seconds: event.simulationDelay)
+                emit(event)
             }
         }
     }
@@ -82,13 +83,5 @@ public class EventSender: @unchecked Sendable {
 
     private func isViewActive(_ viewId: String) -> Bool {
         activeViews.contains(viewId)
-    }
-
-    private func delay(
-        _ delay: Int = (0...2).randomElement()!,
-        closure: @escaping @Sendable () -> Void
-    ) async {
-        await Task.delayFor(seconds: delay)
-        closure()
     }
 }
