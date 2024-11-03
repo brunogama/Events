@@ -2,27 +2,27 @@
 import PackageDescription
 
 let package = Package(
-    name: "Events",
+    name: "EnventConsumerSimulation",
     platforms: [.iOS(.v17)],
     products: [
         .library(
             name: "EventsCommons",
-            type: .dynamic,
+            type: .static,
             targets: ["EventsCommons"]
         ),
         .library(
             name: "EventsDomain",
-            type: .dynamic,
+            type: .static,
             targets: ["EventsDomain"]
         ),
         .library(
             name: "EventsServices",
-            type: .dynamic,
+            type: .static,
             targets: ["EventsServices"]
         ),
         .library(
             name: "EventsUI",
-            type: .dynamic,
+            type: .static,
             targets: ["EventsUI"]
         ),
     ],
