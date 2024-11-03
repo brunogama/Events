@@ -74,31 +74,23 @@ public class EventSender: @unchecked Sendable {
 
     public func registerActiveView(_ viewId: String) {
         Logger.info("Adicionando a lista de subscription \(viewId)")
-        lock.lock()
         activeViews.insert(viewId)
-        lock.unlock()
     }
 
     public func unregisterView(_ viewId: String) {
         Logger.info("Removendo da lista de subscription \(viewId)")
-        lock.lock()
         activeViews.remove(viewId)
-        lock.unlock()
     }
 
     private func isViewActive(_ viewId: String) -> Bool {
-        let result: Bool
-        lock.lock()
-        result = activeViews.contains(viewId)
-        lock.unlock()
-        return result
+        activeViews.contains(viewId)
     }
 
     private func delay(
         _ delay: Int = (0...2).randomElement()!,
-        closure: @escaping @Sendable () -> Void
+        closure: @escaping @Sendable @MainActor () -> Void
     ) async {
         await Task.delayFor(seconds: delay)
-        closure()
+        await closure()
     }
 }
