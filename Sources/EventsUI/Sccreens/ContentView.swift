@@ -33,11 +33,9 @@ public struct ContentView: EventObservableViewProtocol {
             .onReceive(viewModel.$receivedValue) { newEvent in
                 onReceiveEventHandler(newEvent)
             }
-        }
-        .onAppear {
+        }.onAppear {
             viewModel.registerActiveView(viewId)
-        }
-        .onDisappear {
+        }.onDisappear {
             viewModel.unregisterView(viewId)
         }
     }
@@ -59,14 +57,12 @@ extension ContentView {
 
 extension ContentView {
     fileprivate func onReceiveEventHandler(_ newEvent: Published<Event>.Publisher.Output) {
-        DispatchQueue.main.async {
-            if case let .stateUpdated(state) = newEvent {
-                if navigationPath.contains(state.toDestination()) {
-                    navigationPath = []
-                    return
-                }
-                navigationPath.append(state.toDestination())
+        if case let .stateUpdated(state) = newEvent {
+            if navigationPath.contains(state.toDestination()) {
+                navigationPath = []
+                return
             }
+            navigationPath.append(state.toDestination())
         }
     }
 }

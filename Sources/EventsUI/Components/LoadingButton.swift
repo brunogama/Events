@@ -16,7 +16,7 @@ public struct LoadingButton: View {
     @MainActor @Binding public var isLoading: Bool
     @MainActor public let action: ButtonAction
 
-    @MainActor public init(
+    public init(
         title: String,
         isLoading: Binding<Bool> = .constant(false),
         action: ButtonAction = nil

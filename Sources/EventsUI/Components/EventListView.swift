@@ -9,7 +9,6 @@ import EventsCommons
 import EventsDomain
 import SwiftUI
 
-@MainActor
 public struct EventListView: View {
     @MainActor @Binding public var events: [Event]
 
@@ -39,8 +38,7 @@ public struct EventListView: View {
                 }
             }
             .background(Color.dynamicBackground.ignoresSafeArea())
-        }
-        .onAppear {
+        }.onAppear {
             events = []
         }
     }
