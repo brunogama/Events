@@ -38,6 +38,8 @@ public struct EventListView: View {
                 }
             }
             .background(Color.dynamicBackground.ignoresSafeArea())
+        }.onAppear {
+            events = []
         }
     }
 }
