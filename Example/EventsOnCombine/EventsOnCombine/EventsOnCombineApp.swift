@@ -4,9 +4,11 @@
 //
 //  Created by Bruno on 03/11/24.
 //
-`
 
-import Events
+import EventsCommons
+import EventsDomain
+import EventsUI
+import EventsServices
 import SwiftUI
 
 @main

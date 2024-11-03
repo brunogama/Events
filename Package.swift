@@ -3,14 +3,17 @@ import PackageDescription
 
 let package = Package(
     name: "Events",
-    platforms: [.iOS(.v17), .macOS(.v14)],
+    platforms: [.iOS(.v17)],
+    providers: [.brew(["swiftlint/swiftlint"])],
     products: [
         .library(
             name: "EventsCommons",
+            type: .static,
             targets: ["EventsCommons"]
         ),
         .library(
             name: "EventsDomain",
+            type: .static,
             targets: ["EventsDomain"]
         ),
         .library(
@@ -19,6 +22,7 @@ let package = Package(
         ),
         .library(
             name: "EventsUI",
+            type: .static,
             targets: ["EventsUI"]
         )
     ],
@@ -50,6 +54,7 @@ let package = Package(
                 .target(name: "EventsDomain")
             ],
             path: "Sources/EventsUI"
-        )
-    ]
+        ),
+    ],
+    swiftLanguageVersions: [.v5]
 ) // Only one closing parenthesis here
