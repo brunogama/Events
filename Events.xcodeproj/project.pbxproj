@@ -10,35 +10,9 @@
 		1535DE602CD5A7B2005EEEAF /* Events.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Events.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		15E2715D2CD607B2002E061B /* Exceptions for "Events" folder in "Events" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"UI/Extensions/Color+Extensions.swift",
-				"UI/Modfiers/View+Lifecycle.swift",
-			);
-			target = 1535DE5F2CD5A7B2005EEEAF /* Events */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		15E2715E2CD607B2002E061B /* Exceptions for "Events" folder in "Copy Bundle Resources" phase from "Events" target */ = {
-			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
-			buildPhase = 1535DE5E2CD5A7B2005EEEAF /* Resources */;
-			membershipExceptions = (
-				"UI/Extensions/Color+Extensions.swift",
-				"UI/Modfiers/View+Lifecycle.swift",
-			);
-		};
-/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		1535DE622CD5A7B2005EEEAF /* Events */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				15E2715D2CD607B2002E061B /* Exceptions for "Events" folder in "Events" target */,
-				15E2715E2CD607B2002E061B /* Exceptions for "Events" folder in "Copy Bundle Resources" phase from "Events" target */,
-			);
 			path = Events;
 			sourceTree = "<group>";
 		};
@@ -129,6 +103,7 @@
 			mainGroup = 1535DE572CD5A7B2005EEEAF;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				1554ECB12CD6F1B800CFCC5B /* XCLocalSwiftPackageReference "../Events" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1535DE612CD5A7B2005EEEAF /* Products */;
@@ -360,6 +335,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		1554ECB12CD6F1B800CFCC5B /* XCLocalSwiftPackageReference "../Events" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Events;
+		};
+/* End XCLocalSwiftPackageReference section */
 	};
 	rootObject = 1535DE582CD5A7B2005EEEAF /* Project object */;
 }

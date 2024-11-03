@@ -6,6 +6,10 @@
 //
 
 import SwiftUI
+import EventUI
+import EventsCommons
+import EventsDomain
+import EventsServices
 
 @main
 struct EventsApp: App {
