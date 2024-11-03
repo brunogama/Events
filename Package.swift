@@ -29,7 +29,6 @@ let package = Package(
     targets: [
         .target(
             name: "EventsCommons",
-            dependencies: [],
             path: "Sources/EventsCommons"
         ),
         .target(
