@@ -42,7 +42,8 @@ let package = Package(
         .target(
             name: "EventsServices",
             dependencies: [
-                .target(name: "EventsCommons")
+                .target(name: "EventsCommons"),
+                .target(name: "EventsDomain")
             ],
             path: "Sources/EventsServices"
         ),
