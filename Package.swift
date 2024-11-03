@@ -6,9 +6,20 @@ let package = Package(
     platforms: [.iOS(.v17), .macOS(.v14)],
     products: [
         .library(
-            name: "Events",
-            type: .dynamic,
-            targets: ["EventsCommons", "EventsDomain", "EventsServices", "EventsUI"]
+            name: "EventsCommons",
+            targets: ["EventsCommons"]
+        ),
+        .library(
+            name: "EventsDomain",
+            targets: ["EventsDomain"]
+        ),
+        .library(
+            name: "EventsServices",
+            targets: ["EventsServices"]
+        ),
+        .library(
+            name: "EventsUI",
+            targets: ["EventsUI"]
         )
     ],
     targets: [
@@ -21,7 +32,7 @@ let package = Package(
             name: "EventsDomain",
             dependencies: [
                 .target(name: "EventsCommons"),
-                .target(name: "EventsServices"),
+                .target(name: "EventsServices")
             ],
             path: "Sources/EventsDomain"
         ),
@@ -36,9 +47,9 @@ let package = Package(
             name: "EventsUI",
             dependencies: [
                 .target(name: "EventsCommons"),
-                .target(name: "EventsDomain"),
+                .target(name: "EventsDomain")
             ],
             path: "Sources/EventsUI"
-        ),
+        )
     ]
-)
+) // Only one closing parenthesis here

@@ -7,8 +7,8 @@
 
 import Foundation
 
-extension Task where Success == Never, Failure == Never {
-    public static func delayFor(seconds: Int) async {
+public extension Task where Success == Never, Failure == Never {
+    static func delayFor(seconds: Int) async {
         try? await Task.sleep(nanoseconds: UInt64(seconds) * 1_000_000_000)
     }
 }

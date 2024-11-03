@@ -27,7 +27,7 @@ public struct RemoveDevicesView: View {
     }
 }
 
-class RemoveDevicesViewModel: EventConsumerBaseViewModel {
+public class RemoveDevicesViewModel: EventConsumerBaseViewModel {
     override public var action: Action { .removeDevices(.mock()) }
     override public var title: String { "RemoveDevicesView" }
     override public var image: String { "xmark.circle.fill" }

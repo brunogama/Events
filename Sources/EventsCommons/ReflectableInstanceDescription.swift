@@ -33,7 +33,7 @@ private protocol ValueDescriptionHandler: Sendable {
 }
 
 package final class ValueDescriptionBuilder: Sendable {
-    static let shared = ValueDescriptionBuilder()
+    package static let shared = ValueDescriptionBuilder()
 
     fileprivate let handlers: [ValueDescriptionHandler] = [
         OptionalHandler(),
@@ -44,11 +44,11 @@ package final class ValueDescriptionBuilder: Sendable {
         DefaultHandler(),
     ]
 
-    let queue = DispatchQueue(label: "ValueDescriptionBuilder")
+    package let queue = DispatchQueue(label: "ValueDescriptionBuilder")
 
     private init() {}
 
-    func buildDescription(of value: Any) -> String {
+    package func buildDescription(of value: Any) -> String {
         queue.sync {
             let mirror = Mirror(reflecting: value)
             for handler in handlers {
