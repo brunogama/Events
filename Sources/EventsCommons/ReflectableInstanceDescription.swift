@@ -44,21 +44,18 @@ package final class ValueDescriptionBuilder: Sendable {
         DefaultHandler(),
     ]
 
-    package let queue = DispatchQueue(label: "ValueDescriptionBuilder", qos: .utility)
+    package let queue = DispatchQueue(label: "ValueDescriptionBuilder")
 
     private init() {}
 
     package func buildDescription(of value: Any) -> String {
-        queue.sync { [weak self] in
-            guard let self = self else { return "\(value)" }
-            let mirror = Mirror(reflecting: value)
-            for handler in handlers {
-                if handler.canHandle(mirror.displayStyle) {
-                    return handler.handle(value, builder: self)
-                }
+        let mirror = Mirror(reflecting: value)
+        for handler in handlers {
+            if handler.canHandle(mirror.displayStyle) {
+                return handler.handle(value, builder: self)
             }
-            return "\(value)"
         }
+        return "\(value)"
     }
 }
 
