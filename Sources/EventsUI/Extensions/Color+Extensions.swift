@@ -8,5 +8,5 @@
 import SwiftUI
 
 extension Color {
-    public static let dynamicBackground = Color("DynamicBackgroundColor")
+    public static let dynamicBackground = Color.white
 }

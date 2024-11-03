@@ -1,6 +1,3 @@
-import Combine
-import EventsCommons
-import EventsDomain
 //
 //  StatusViewProtocol.swift
 //  Events
@@ -9,4 +6,4 @@ import EventsDomain
 //
 import SwiftUI
 
-public protocol StatusReceiverBaseViewStrutureProtocol: HasViewModelEventConsumerProtocol {}
+public protocol StatusReceiverBaseViewStrutureProtocol: HasViewModelEventConsumerProtocol, IdentifiableView {}

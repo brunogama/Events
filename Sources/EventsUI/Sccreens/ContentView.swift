@@ -46,12 +46,6 @@ extension ContentView {
             Spacer()
             StateFullButton()
         }
-        .onAppear {
-            viewModel.viewDidAppear()
-        }
-        .onDisappear {
-            viewModel.viewDidDisappear()
-        }
         .padding()
     }
 }

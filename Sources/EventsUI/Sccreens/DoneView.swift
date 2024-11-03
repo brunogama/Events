@@ -20,10 +20,10 @@ public struct DoneView: View {
     public var body: some View {
         Content()
             .onAppear {
-                viewModel.viewDidAppear()
+                viewModel.registerActiveView(viewId)
             }
             .onDisappear {
-                viewModel.viewDidDisappear()
+                viewModel.unregisterView(viewId)
             }
             .padding()
     }

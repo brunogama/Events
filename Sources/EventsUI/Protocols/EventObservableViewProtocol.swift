@@ -10,7 +10,7 @@ import EventsCommons
 import EventsDomain
 import SwiftUI
 
-protocol EventObservableViewProtocol: HasViewModelEventConsumerProtocol {
+protocol EventObservableViewProtocol: HasViewModelEventConsumerProtocol, IdentifiableView {
 }
 
 extension EventObservableViewProtocol {

@@ -17,11 +17,10 @@ public struct OnboardingView: View {
     public var body: some View {
         Content()
             .onAppear {
-                viewModel.isBeingShown = true
+                viewModel.registerActiveView(viewId)
             }
             .onDisappear {
-                viewModel.isBeingShown = false
-                viewModel.unbind()
+                viewModel.unregisterView(viewId)
             }
             .padding()
     }

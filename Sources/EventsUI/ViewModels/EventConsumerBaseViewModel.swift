@@ -11,17 +11,9 @@ import EventsDomain
 import Foundation
 
 open class EventConsumerBaseViewModel: EventConsumerProtocol, ObservableObject {
-
-    public var cancellable: AnyCancellable?
+    @Published private(set) public var event: Event = .idle
     public var cancellables: Set<AnyCancellable> = []
     public var action: Action { fatalError("should override") }
-    public var isBeingShown: Bool? = nil
-    public enum ViewLifecycle {
-        case appeared
-        case disappeared
-    }
-
-    private let lifecycle = PassthroughSubject<ViewLifecycle, Never>()
 
     @Published public var receivedValues: [Event] = []
     @Published public var receivedValue: Event = .idle
@@ -34,40 +26,40 @@ open class EventConsumerBaseViewModel: EventConsumerProtocol, ObservableObject {
         self.emitter = emitter
         //        self.eventManager = EventStateManager(emitter)
         //        bind(to: emitter)
-        setupExtraSubscriptions(emitter)
+        //        setupExtraSubscriptions(emitter)
     }
 
-    private func setupExtraSubscriptions(_ emitter: EventSender) {
-        let visibilityState =
-            lifecycle
-            .scan(false) { isVisible, event in
-                switch event {
-                case .appeared: return true
-                case .disappeared: return false
-                }
-            }
-            .removeDuplicates()
-            .share()
-
-        emitter.eventSubject
-            .combineLatest(visibilityState)
-            .filter { _, isVisble in isVisble }
-            .map { event, _ in event }
-            .removeDuplicates()
-            .buffer(size: 5, prefetch: .byRequest, whenFull: .dropOldest)
-            .dropFirst()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
-                self?.appendEvent($0)
-            }
-            .store(in: &cancellables)
-    }
-
-    public func viewDidAppear() {
-        lifecycle.send(.appeared)
-    }
-
-    public func viewDidDisappear() {
-        lifecycle.send(.disappeared)
-    }
+    //    private func setupExtraSubscriptions(_ emitter: EventSender) {
+    //        let visibilityState =
+    //            lifecycle
+    //            .scan(false) { isVisible, event in
+    //                switch event {
+    //                case .appeared: return true
+    //                case .disappeared: return false
+    //                }
+    //            }
+    //            .removeDuplicates()
+    //            .share()
+    //
+    //        emitter.eventSubject
+    //            .combineLatest(visibilityState)
+    //            .filter { _, isVisble in isVisble }
+    //            .map { event, _ in event }
+    //            .removeDuplicates()
+    //            .buffer(size: 5, prefetch: .byRequest, whenFull: .dropOldest)
+    //            .dropFirst()
+    //            .receive(on: DispatchQueue.main)
+    //            .sink { [weak self] in
+    //                self?.appendEvent($0)
+    //            }
+    //            .store(in: &cancellables)
+    //    }
+    //
+    //    public func viewDidAppear() {
+    //        lifecycle.send(.appeared)
+    //    }
+    //
+    //    public func viewDidDisappear() {
+    //        lifecycle.send(.disappeared)
+    //    }
 }

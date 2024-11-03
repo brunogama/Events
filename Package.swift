@@ -23,7 +23,7 @@ let package = Package(
             name: "EventsUI",
             type: .static,
             targets: ["EventsUI"]
-        )
+        ),
     ],
     targets: [
         .target(
@@ -33,7 +33,7 @@ let package = Package(
         .target(
             name: "EventsDomain",
             dependencies: [
-                .target(name: "EventsCommons"),
+                .target(name: "EventsCommons")
             ],
             path: "Sources/EventsDomain"
         ),
@@ -41,7 +41,7 @@ let package = Package(
             name: "EventsServices",
             dependencies: [
                 .target(name: "EventsCommons"),
-                .target(name: "EventsDomain")
+                .target(name: "EventsDomain"),
             ],
             path: "Sources/EventsServices"
         ),
@@ -49,10 +49,10 @@ let package = Package(
             name: "EventsUI",
             dependencies: [
                 .target(name: "EventsCommons"),
-                .target(name: "EventsDomain")
+                .target(name: "EventsDomain"),
             ],
             path: "Sources/EventsUI"
         ),
     ],
     swiftLanguageVersions: [.v5]
-) // Only one closing parenthesis here
+)  // Only one closing parenthesis here

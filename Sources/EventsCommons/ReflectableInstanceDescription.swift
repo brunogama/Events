@@ -49,15 +49,13 @@ package final class ValueDescriptionBuilder: Sendable {
     private init() {}
 
     package func buildDescription(of value: Any) -> String {
-        queue.sync {
-            let mirror = Mirror(reflecting: value)
-            for handler in handlers {
-                if handler.canHandle(mirror.displayStyle) {
-                    return handler.handle(value, builder: self)
-                }
+        let mirror = Mirror(reflecting: value)
+        for handler in handlers {
+            if handler.canHandle(mirror.displayStyle) {
+                return handler.handle(value, builder: self)
             }
-            return "\(value)"
         }
+        return "\(value)"
     }
 }
 
