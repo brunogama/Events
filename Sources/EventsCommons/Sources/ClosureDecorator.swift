@@ -24,13 +24,13 @@ import Foundation
 ///        canHandle: @escaping (Any, Any) -> Bool,
 ///        areEqual: @escaping (Any, Any) -> Bool
 ///    ) {
-///        self.canHandle = ClosureDecorator.decorate(canHandle) { closure, a, b in
+///        self.canHandle = closureDecorator(canHandle) { closure, a, b in
 ///            print("🚨 Checking if can handle ")
 ///            // Perform more stuff
 ///            return closure(a, b)
 ///        }
 ///
-///        self.areEqual = ClosureDecorator.decorate(canHandle) { closure, a, b in
+///        self.areEqual = closureDecorator(canHandle) { closure, a, b in
 ///            print("🚨 Checking if are equal ")
 ///            // Perform more stuff
 ///            return closure(a, b)
@@ -38,25 +38,22 @@ import Foundation
 ///    }
 ///}
 ///  ```
-
-public enum ClosureUtils {
-    public static func decorate<each T, R>(
-        _ closure: @escaping (repeat each T) -> R,
-        with decorator: @escaping (@escaping (repeat each T) -> R, repeat each T) -> R
-    ) -> (repeat each T) -> R {
-        { (args: repeat each T) in
-            decorator(closure, repeat each args)
-        }
+public func closureDecorator<each T, R>(
+    _ closure: @escaping (repeat each T) -> R,
+    with decorator: @escaping (@escaping (repeat each T) -> R, repeat each T) -> R
+) -> (repeat each T) -> R {
+    { (args: repeat each T) in
+        decorator(closure, repeat each args)
     }
-    
-    /// This is the default handler for the decorator
-    /// If the closure is not set, this will be called
-    /// and the app will crash.
-    public static func makeDefaultHandler<each T, R>() -> (repeat each T) -> R {
-        return { (_ arg: repeat each T) in
-            assertionFailure("Closure is set to default. Please set a custom closure.")
-            abort()
-        }
+}
+
+/// This is the default handler for the decorator
+/// If the closure is not set, this will be called
+/// and the app will crash.
+public func makeDefaultHandler<each T, R>() -> (repeat each T) -> R {
+    return { (_ arg: repeat each T) in
+        assertionFailure("Closure is set to default. Please set a custom closure.")
+        abort()
     }
 }
 
