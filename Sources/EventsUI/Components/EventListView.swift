@@ -12,7 +12,7 @@ import SwiftUI
 public struct EventListView: View {
     @MainActor @Binding public var events: [Event]
 
-    public var body: some View {
+    @MainActor public var body: some View {
         ScrollViewReader { scrollViewProxy in
             ScrollView {
                 LazyVStack(spacing: 16) {

@@ -11,13 +11,13 @@ import SwiftUI
 
 
 public struct EventRow: View {
-    public let event: Event
+    @MainActor public let event: Event
     
     @MainActor public init(event: Event) {
         self.event = event
     }
 
-    public var body: some View {
+    @MainActor  public var body: some View {
         HStack {
             Image(systemName: event.icon)
                 .font(.title2)
