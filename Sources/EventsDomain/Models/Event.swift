@@ -82,7 +82,7 @@ public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Se
     public var simulationDelay: Int {
         switch self {
         case .loading: return 1
-        case .startProcessing: return 1
+        case .startProcessing: return 0
         case .willUpdateState: return 0
         case .currentState: return 0
         case .error: return 0
