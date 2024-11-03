@@ -7,27 +7,19 @@
 
 import Combine
 import SwiftUI
+import EventsDomain
+import EventsCommons
 
-enum Destination: String, Hashable, Equatable {
-    case none
-    case intro
-    case onboarding
-    case done
-    case removeDevices
-    case liveness
-    case sms
-    case email
-}
 
-class NavigationRouter {
+public final class NavigationRouter {
     private let eventSender: EventSender
     
-    init(eventSender: EventSender) {
+    public init(eventSender: EventSender) {
         self.eventSender = eventSender
     }
     
     @MainActor
-    func navigateTo(
+    public func navigateTo(
         _ destination: Destination
     ) -> any View {
         switch destination {

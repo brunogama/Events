@@ -6,12 +6,36 @@
 //
 
 import EventsCommons
+import Foundation
 
 public enum RegisterState: RawRepresentable, Equatable, Hashable, ReflectableDescription, Identifiable, Sendable {
-    public var id: Int {
-        self.hashValue
+    private enum Constants {
+        static let salt: String = {
+            var random: RandomNumberGenerator = SystemRandomNumberGenerator()
+            let salt = (0...5)
+                .compactMap { _ in
+                    UUID().uuidString
+                }
+                .joined()
+                .shuffled(using: &random)
+                .map { String($0) }
+                .joined()
+            
+            return salt
+        }()
     }
-    
+    public var id: Int {
+        guard
+            let saltByteCpunt = Constants.salt.data(using: .utf8)?.count,
+            let uuidByteCount = UUID().uuidString.data(using: .utf8)?.count,
+            let instanceInformationbyteCount = instanceDescription.data(using: .utf8)?.count
+        else {
+            return UUID().uuidString.count + instanceDescription.count + (0...Int.max).randomElement()!
+        }
+
+        return uuidByteCount + instanceInformationbyteCount
+    }
+
     case none
     case intro
     case onboarding
@@ -44,18 +68,20 @@ public enum RegisterState: RawRepresentable, Equatable, Hashable, ReflectableDes
     public func hash(into hasher: inout Hasher) {
         hasher.combine(instanceDescription)
     }
-    
-    static func mockDone() -> RegisterState {
-        .done(
-            account: "account",
-            password: "password",
-            response: .mock()
-        )
-    }
+
+    #if DEBUG
+        public static func mockDone() -> RegisterState {
+            .done(
+                account: "account",
+                password: "password",
+                response: .mock()
+            )
+        }
+    #endif
 }
 
 extension RegisterState {
-    func toDestination() -> Destination {
+    public func toDestination() -> Destination {
         switch self {
         case .none: .none
         case .intro: .intro

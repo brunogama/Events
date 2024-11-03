@@ -7,13 +7,15 @@
 
 import Foundation
 import Combine
+import EventsCommons
+import EventsDomain
 
 open class EventConsumerBaseViewModel: EventConsumerProtocol, ObservableObject {
     
-    var cancellable: AnyCancellable?
-    var cancellables: Set<AnyCancellable> = []
-    var action: Action { fatalError("should override") }
-    var isBeingShown: Bool? = nil
+    public var cancellable: AnyCancellable?
+    public var cancellables: Set<AnyCancellable> = []
+    public var action: Action { fatalError("should override") }
+    public var isBeingShown: Bool? = nil
     enum ViewLifecycle {
         case appeared
         case disappeared
@@ -22,18 +24,18 @@ open class EventConsumerBaseViewModel: EventConsumerProtocol, ObservableObject {
     private let lifecycle = PassthroughSubject<ViewLifecycle, Never>()
 
     
-    @Published var receivedValues: [Event] = []
-    @Published var receivedValue: Event = .idle
-    @Published var isProcessing: Bool = false
-    
-    var emitter: EventSender?
-    var title: String { "Base" }
-    var buttonTitle: String { "Send Event" }
-    var image: String { "globe" }
-    init(emitter: EventSender) {
+    @Published public var receivedValues: [Event] = []
+    @Published public var receivedValue: Event = .idle
+    @Published public var isProcessing: Bool = false
+    public var emitter: EventSender?
+    public var title: String { "Base" }
+    public var buttonTitle: String { "Send Event" }
+    public var image: String { "globe" }
+    public init(emitter: EventSender) {
         self.emitter = emitter
 //        self.eventManager = EventStateManager(emitter)
-        bind(to: emitter)
+//        bind(to: emitter)
+        setupExtraSubscriptions(emitter)
     }
     
     private func setupExtraSubscriptions(_ emitter: EventSender) {
@@ -59,11 +61,11 @@ open class EventConsumerBaseViewModel: EventConsumerProtocol, ObservableObject {
             }.store(in: &cancellables)
     }
     
-    func viewDidAppear() {
+    public func viewDidAppear() {
         lifecycle.send(.appeared)
     }
     
-    func viewDidDisappear() {
+    public func viewDidDisappear() {
         lifecycle.send(.disappeared)
     }
 }

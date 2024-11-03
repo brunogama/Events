@@ -8,6 +8,8 @@
 
 import SwiftUI
 import Combine
+import EventsDomain
+import EventsCommons
 
 struct DoneView: View {
     @StateObject var viewModel: ViewModel

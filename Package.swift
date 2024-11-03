@@ -28,7 +28,7 @@ enum Products: String, CaseIterable {
     }
 
     static var platforms: [SupportedPlatform] {
-        [.iOS(.v15), .macOS(.v14)]
+        [.iOS(.v17), .macOS(.v10_14)]
     }
 
     var libraryTargets: [String] {

@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import EventsDomain
+import EventsCommons
 
 struct ContentView: EventObservableViewProtocol {
     typealias ViewModel = ContentViewViewModel

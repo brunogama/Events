@@ -5,7 +5,7 @@
 //  Created by Bruno on 02/11/24.
 //
 
-enum Destination: String, Hashable, Equatable {
+public enum Destination: String, Hashable, Equatable {
     case none
     case intro
     case onboarding

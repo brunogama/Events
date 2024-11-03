@@ -8,12 +8,19 @@
 import Foundation
 
 public struct Response: Codable, Sendable {
-    var status: String
-    var message: String
-    var data: Data
-    var code: Int
+    public var status: String
+    public var message: String
+    public var data: Data
+    public var code: Int
+    
+    public init(status: String, message: String, data: Data, code: Int) {
+        self.status = status
+        self.message = message
+        self.data = data
+        self.code = code
+    }
 
-    static func mock() -> Response {
+    public static func mock() -> Response {
         Response(status: "OK", message: "Success", data: Data(), code: 200)
     }
 }

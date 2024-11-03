@@ -7,6 +7,8 @@
 
 import SwiftUI
 import Combine
+import EventsDomain
+import EventsCommons
 
 struct LivenessView: View {
     @StateObject var viewModel: LivenessViewModel

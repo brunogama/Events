@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import EventsDomain
+import EventsCommons
 
 struct OnLoadModifier: ViewModifier {
     @State private var isInitialized = false

@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import EventsDomain
+import EventsCommons
 
 struct EventListView: View {
     @Binding var events: [Event]

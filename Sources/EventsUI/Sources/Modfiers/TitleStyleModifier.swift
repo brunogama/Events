@@ -7,6 +7,8 @@
 
 
 import SwiftUI
+import EventsDomain
+import EventsCommons
 
 struct TitleStyleModifier: ViewModifier {
     var title: String

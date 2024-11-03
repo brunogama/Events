@@ -7,12 +7,18 @@
 
 import SwiftUI
 import Combine
+import EventsDomain
+import EventsCommons
 
-struct IntroView: View {
+public struct IntroView: View {
     @StateObject var viewModel: IntroViewModel
     @State private var currentDestination: Destination? = nil
     
-    var body: some View {
+    public init(viewModel: IntroViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
+    }
+    
+    public var body: some View {
         Content()
             .onAppear {
                 viewModel.isBeingShown = true
@@ -23,8 +29,8 @@ struct IntroView: View {
     }
 }
 
-class IntroViewModel: EventConsumerBaseViewModel {
-    override var action: Action { .passIntro }
+public class IntroViewModel: EventConsumerBaseViewModel {
+    var action: Action { .passIntro }
     
     override var title: String { "IntroView" }
     

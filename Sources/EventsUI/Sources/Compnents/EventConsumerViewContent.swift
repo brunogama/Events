@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import EventsDomain
+import EventsCommons
 
 struct EventConsumerViewContent: View {
     @ObservedObject var viewModel: EventConsumerBaseViewModel

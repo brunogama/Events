@@ -9,6 +9,8 @@
 import Combine
 import SwiftUI
 import Foundation
+import EventsDomain
+import EventsCommons
 
 class EventStateManager {
     private var cancellables = Set<AnyCancellable>()
@@ -200,7 +202,7 @@ class EventStateManager {
 }
 
 
-protocol EventConsumerProtocol: AnyObject, ObservableObject {
+public protocol EventConsumerProtocol: AnyObject, ObservableObject {
     var cancellable: AnyCancellable? { get set }
     var cancellables: Set<AnyCancellable> { get set }
     var action: Action { get }
@@ -225,7 +227,7 @@ protocol EventConsumerProtocol: AnyObject, ObservableObject {
     func viewDidDisappear()
 }
 
-extension EventConsumerProtocol {
+public extension EventConsumerProtocol {
     var title: String { "Base" }
     var buttonTitle: String { "Send Event" }
     var renderInputTextField: Bool { false }
@@ -255,6 +257,7 @@ extension EventConsumerProtocol {
         receivedValues.append(value)
     }
     
+    @MainActor
     func proccessAction(_ action: Action) {
         emitter?.proccessAction(action)
     }

@@ -7,20 +7,22 @@
 
 import Combine
 import Foundation
+import EventsCommons
 
 public class EventSender: @unchecked Sendable {
 
     let passthroughSubject = CurrentValueSubject<Event, Never>(.idle)
     
-    var eventSubject = CurrentValueSubject<Event, Never>(.idle)
+    public var eventSubject = CurrentValueSubject<Event, Never>(.idle)
     
-    init() {}
+    public init() {}
     
     func emit(_ event: Event) {
         eventSubject.send(event)
     }
 
-    func proccessAction(_ action: Action) {
+    @MainActor
+    public func proccessAction(_ action: Action) {
         switch action {
         case .passIntro:
             fakeActionProcessing(.onboarding)
@@ -39,6 +41,7 @@ public class EventSender: @unchecked Sendable {
         }
     }
 
+    @MainActor
     private func fakeActionProcessing(_ registerState: RegisterState) {
         let eventsSimulation = [
             Event.startProcessing,
@@ -57,13 +60,12 @@ public class EventSender: @unchecked Sendable {
     }
 
     private func delay(
-        _ delay: UInt64 = (0...2).randomElement().map(UInt64)!,
+        _ delay: UInt64 = (0...2).randomElement()!,
         closure: @escaping @Sendable () -> Void
     ) async {
-        await Task.sleep(delay)
+        await Task.sleep(seconds: delay)
         closure()
     }
-    
     
     public func resetState() {
         eventSubject.send(.idle)

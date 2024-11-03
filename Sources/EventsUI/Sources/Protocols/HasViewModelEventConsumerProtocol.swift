@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import EventsDomain
+import EventsCommons
 
 protocol HasViewModelEventConsumerProtocol: View {
     associatedtype ViewModel: EventConsumerProtocol

@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import EventsDomain
+import EventsCommons
 
 struct CustomLoadingIndicator: View {
     @State private var isAnimating = false

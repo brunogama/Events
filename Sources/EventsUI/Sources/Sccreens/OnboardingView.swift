@@ -7,6 +7,8 @@
 
 import SwiftUI
 import Combine
+import EventsDomain
+import EventsCommons
 
 struct OnboardingView: View {
     @StateObject var viewModel: OnboardingViewModel
@@ -23,13 +25,10 @@ struct OnboardingView: View {
     }
 }
 
-class OnboardingViewModel: IntroViewModel {
+class OnboardingViewModel: EventConsumerBaseViewModel {
     override var action: Action { .passOnboarding }
     override var title: String { "OnboardingView" }
     override var image: String { "person.crop.circle.badge.checkmark" }
-
-    override func receive(_ value: Event) {
-        print("OnboardingViewModel received: \(value)")
-    }
+    var renderInputTextField: Bool { false }
 }
     
