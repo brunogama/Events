@@ -205,23 +205,23 @@ import SwiftUI
 
 @MainActor
 public protocol EventConsumerProtocol: AnyObject, ObservableObject {
-    var event: Event { get }
+    @MainActor var event: Event { get }
     var cancellables: Set<AnyCancellable> { get set }
     var action: Action { get }
-    var receivedValue: Event { get set }
-    var isProcessing: Bool { get set }
-    var receivedValues: [Event] { get set }
+    @MainActor var receivedValue: Event { get set }
+    @MainActor var isProcessing: Bool { get set }
+    @MainActor var receivedValues: [Event] { get set }
     var emitter: EventSender? { get set }
     var title: String { get }
     var buttonTitle: String { get }
     var renderInputTextField: Bool { get }
 
-    func registerActiveView(_ viewId: String)
-    func unregisterView(_ viewId: String)
-    func receivedEvent(_ event: Event)
-    func appendEvent(_ value: Event)
+    @MainActor func registerActiveView(_ viewId: String)
+    @MainActor func unregisterView(_ viewId: String)
+    @MainActor func receivedEvent(_ event: Event)
+    @MainActor func appendEvent(_ value: Event)
     func proccessAction(_ action: Action)
-    func buttonTap()
+    @MainActor func buttonTap()
 }
 
 private let lock = NSLock()

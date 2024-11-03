@@ -15,7 +15,7 @@ public struct ContentView: EventObservableViewProtocol {
     @ObservedObject public var viewModel: ViewModel
     private let lock = NSLock()
     @State private var navigationPath: [Destination] = []
-    private let navigationRouter: NavigationRouter
+    @MainActor private let navigationRouter: NavigationRouter
 
     public init(viewModel: ViewModel, navigationRouter: NavigationRouter) {
         self.viewModel = viewModel
@@ -57,15 +57,17 @@ extension ContentView {
 
 extension ContentView {
     fileprivate func onReceiveEventHandler(_ newEvent: Published<Event>.Publisher.Output) {
+        defer {
+            lock.unlock()
+        }
+        lock.lock()
         if case let .stateUpdated(state) = newEvent {
-            lock.lock()
             if navigationPath.contains(state.toDestination()) {
                 navigationPath = []
                 return
             }
         
             navigationPath.append(state.toDestination())
-            lock.unlock()
         }
     }
 }
