@@ -3,25 +3,26 @@ import PackageDescription
 
 let package = Package(
     name: "Events",
-    platforms: [.iOS(.v17), .macOS(.v14)],
+    platforms: [.iOS(.v17)],
     products: [
         .library(
             name: "EventsCommons",
-            type: .static,
+            type: .dynamic,
             targets: ["EventsCommons"]
         ),
         .library(
             name: "EventsDomain",
-            type: .static,
+            type: .dynamic,
             targets: ["EventsDomain"]
         ),
         .library(
             name: "EventsServices",
+            type: .dynamic,
             targets: ["EventsServices"]
         ),
         .library(
             name: "EventsUI",
-            type: .static,
+            type: .dynamic,
             targets: ["EventsUI"]
         ),
     ],
