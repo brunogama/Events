@@ -13,7 +13,7 @@ public struct LoadingButton: View {
     public typealias ButtonAction = (() -> Void)?
 
     public let title: String
-    @Binding public var isLoading: Bool
+    @MainActor @Binding public var isLoading: Bool
     @MainActor public let action: ButtonAction
 
     @MainActor public init(

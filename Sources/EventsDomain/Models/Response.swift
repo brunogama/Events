@@ -20,6 +20,7 @@ public struct Response: Codable, Sendable {
         self.code = code
     }
 
+    @MainActor
     public static func mock() -> Response {
         Response(status: "OK", message: "Success", data: Data(), code: 200)
     }

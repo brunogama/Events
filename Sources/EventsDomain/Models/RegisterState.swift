@@ -8,6 +8,7 @@
 import EventsCommons
 import Foundation
 
+
 public enum RegisterState: RawRepresentable, Equatable, Hashable, ReflectableDescription, Identifiable, Sendable {
     private enum Constants {
         @MainActor public static let salt: String = {
@@ -71,6 +72,7 @@ public enum RegisterState: RawRepresentable, Equatable, Hashable, ReflectableDes
     }
 
     #if DEBUG
+        @MainActor
         public static func mockDone() -> RegisterState {
             .done(
                 account: "account",
@@ -82,6 +84,7 @@ public enum RegisterState: RawRepresentable, Equatable, Hashable, ReflectableDes
 }
 
 extension RegisterState {
+    @MainActor
     public func toDestination() -> Destination {
         switch self {
         case .none: .none

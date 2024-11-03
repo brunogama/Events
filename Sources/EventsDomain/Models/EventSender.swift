@@ -17,6 +17,7 @@ public class EventSender: @unchecked Sendable {
 
     public init() {}
 
+    @MainActor
     public func emit(_ event: Event) {
         stateSubject.send(event)
     }
@@ -52,13 +53,13 @@ public class EventSender: @unchecked Sendable {
         ]
         Task {
             for event in eventsSimulation {
-                await delay(event.simulationDelay) { [weak self] in
-                    self?.emit(event)
-                }
+                await Task.delayFor(seconds: event.simulationDelay)
+                emit(event)
             }
         }
     }
-
+    
+    @MainActor
     public func createPublisher(for viewId: String) -> AnyPublisher<Event, Never> {
         Logger.info("Binding no id`1 \(viewId)")
         return
@@ -84,13 +85,5 @@ public class EventSender: @unchecked Sendable {
 
     private func isViewActive(_ viewId: String) -> Bool {
         activeViews.contains(viewId)
-    }
-
-    private func delay(
-        _ delay: Int = (0...2).randomElement()!,
-        closure: @escaping @Sendable @MainActor () -> Void
-    ) async {
-        await Task.delayFor(seconds: delay)
-        await closure()
     }
 }

@@ -237,6 +237,7 @@ extension EventConsumerProtocol {
         Logger.info("Classe atual \(String(describing: self))")
     }
 
+    @MainActor
     public func registerActiveView(_ viewId: String) {
         emitter?.registerActiveView(viewId)
         emitter?.createPublisher(for: viewId)
@@ -247,27 +248,32 @@ extension EventConsumerProtocol {
             .store(in: &cancellables)
     }
 
+    @MainActor
     public func unregisterView(_ viewId: String) {
         emitter?.unregisterView(viewId)
         unbind()
     }
 
+    @MainActor
     public func appendEvent(_ value: Event) {
+        receivedEvent(value)
         isProcessing = value.isProcessing
         receivedValue = value
         lock.lock()
         receivedValues.append(value)
         lock.unlock()
     }
-    @MainActor 
+    @MainActor
     public func proccessAction(_ action: Action) {
         emitter?.proccessAction(action)
     }
 
+    @MainActor
     public func buttonTap() {
         proccessAction(self.action)
     }
 
+    @MainActor
     public func unbind() {
         cancellables.removeAll()
     }
