@@ -13,6 +13,7 @@ public class EventSender: @unchecked Sendable {
     private var cancellables = Set<AnyCancellable>()
     private let stateSubject = PassthroughSubject<Event, Never>()
     private var activeViews: Set<String> = []
+    private let lock = NSLock()
 
     public init() {}
 
@@ -62,6 +63,7 @@ public class EventSender: @unchecked Sendable {
         Logger.info("Binding no id`1 \(viewId)")
         return
             stateSubject
+            .removeDuplicates { $0 == $1 }
             .receive(on: DispatchQueue.main)
             .filter { [weak self] _ in
                 self?.isViewActive(viewId) ?? false
@@ -72,16 +74,24 @@ public class EventSender: @unchecked Sendable {
 
     public func registerActiveView(_ viewId: String) {
         Logger.info("Adicionando a lista de subscription \(viewId)")
+        lock.lock()
         activeViews.insert(viewId)
+        lock.unlock()
     }
 
     public func unregisterView(_ viewId: String) {
         Logger.info("Removendo da lista de subscription \(viewId)")
+        lock.lock()
         activeViews.remove(viewId)
+        lock.unlock()
     }
 
     private func isViewActive(_ viewId: String) -> Bool {
-        activeViews.contains(viewId)
+        let result: Bool
+        lock.lock()
+        result = activeViews.contains(viewId)
+        lock.unlock()
+        return result
     }
 
     private func delay(
