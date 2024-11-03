@@ -10,6 +10,7 @@ import EventsDomain
 import SwiftUI
 
 public struct ContentView: EventObservableViewProtocol {
+    public let viweId = "ContentView"
     public typealias ViewModel = ContentViewViewModel
     @ObservedObject public var viewModel: ViewModel
 
@@ -32,6 +33,10 @@ public struct ContentView: EventObservableViewProtocol {
             .onReceive(viewModel.$receivedValue) { newEvent in
                 onReceiveEventHandler(newEvent)
             }
+        }.onAppear {
+            viewModel.registerActiveView(viewId)
+        }.onDisappear {
+            viewModel.unregisterView(viewId)
         }
     }
 }
