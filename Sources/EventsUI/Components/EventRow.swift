@@ -9,9 +9,13 @@ import EventsCommons
 import EventsDomain
 import SwiftUI
 
-@MainActor
+
 public struct EventRow: View {
     public let event: Event
+    
+    @MainActor public init(event: Event) {
+        self.event = event
+    }
 
     public var body: some View {
         HStack {

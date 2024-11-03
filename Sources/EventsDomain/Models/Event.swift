@@ -8,6 +8,7 @@
 import EventsCommons
 import Foundation
 
+
 public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Sendable {
     public var id: String {
         UUID().uuidString + instanceDescription
@@ -35,7 +36,7 @@ public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Se
         hasher.combine(instanceDescription)
     }
 
-    public var isProcessing: Bool {
+    @MainActor public var isProcessing: Bool {
         switch self {
         case .loading: return true
         case .startProcessing: return true
@@ -44,11 +45,11 @@ public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Se
         }
     }
 
-    public var isIdle: Bool {
+    @MainActor public var isIdle: Bool {
         self == .idle
     }
 
-    public var willTransition: Bool {
+    @MainActor public var willTransition: Bool {
         switch self {
         case .willUpdateState: return true
         case .stateUpdated: return true
@@ -56,7 +57,7 @@ public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Se
         }
     }
 
-    public var isDone: Bool {
+    @MainActor public var isDone: Bool {
         if case let .currentState(state) = self,
             case .done = state
         {
@@ -65,21 +66,21 @@ public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Se
         return false
     }
 
-    public var hasError: Error? {
+    @MainActor public var hasError: Error? {
         if case let .error(error) = self {
             return error
         }
         return nil
     }
 
-    public var currentState: RegisterState? {
+    @MainActor public var currentState: RegisterState? {
         if case let .currentState(state) = self {
             return state
         }
         return nil
     }
 
-    public var simulationDelay: Int {
+    @MainActor public var simulationDelay: Int {
         switch self {
         case .loading: return 1
         case .startProcessing: return 0
@@ -91,7 +92,7 @@ public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Se
         }
     }
 
-    public var icon: String {
+    @MainActor public var icon: String {
         switch self {
         case .idle:
             return "pause.circle"

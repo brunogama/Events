@@ -10,7 +10,7 @@ import Foundation
 
 public enum RegisterState: RawRepresentable, Equatable, Hashable, ReflectableDescription, Identifiable, Sendable {
     private enum Constants {
-        public static let salt: String = {
+        @MainActor public static let salt: String = {
             var random: RandomNumberGenerator = SystemRandomNumberGenerator()
             let salt = (0...5)
                 .compactMap { _ in
@@ -24,7 +24,8 @@ public enum RegisterState: RawRepresentable, Equatable, Hashable, ReflectableDes
             return salt
         }()
     }
-    public var id: Int {
+    
+    @MainActor public var id: Int {
         guard
             let saltByteCpunt = Constants.salt.data(using: .utf8)?.count,
             let uuidByteCount = UUID().uuidString.data(using: .utf8)?.count,
@@ -33,7 +34,7 @@ public enum RegisterState: RawRepresentable, Equatable, Hashable, ReflectableDes
             return UUID().uuidString.count + instanceDescription.count + (0...Int.max).randomElement()!
         }
 
-        return uuidByteCount + instanceInformationbyteCount
+        return uuidByteCount + instanceInformationbyteCount + saltByteCpunt
     }
 
     case none

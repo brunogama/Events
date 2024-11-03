@@ -6,7 +6,7 @@
 //
 
 public protocol ReflectableDescription {
-    var instanceDescription: String { get }
+    @MainActor var instanceDescription: String { get }
 }
 
 extension ReflectableDescription {

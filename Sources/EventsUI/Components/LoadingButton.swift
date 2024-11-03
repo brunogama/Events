@@ -16,7 +16,7 @@ public struct LoadingButton: View {
     @Binding public var isLoading: Bool
     @MainActor public let action: ButtonAction
 
-    public init(
+    @MainActor public init(
         title: String,
         isLoading: Binding<Bool> = .constant(false),
         action: ButtonAction = makeDefaultHandler()
