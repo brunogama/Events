@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ReflectableInstanceDescription: CustomStringConvertible, Hashable, Equatable, @unchecked Sendable {
+public struct ReflectableInstanceDescription: CustomStringConvertible, Hashable, Equatable {
     public let description: String
 
     public init(_ value: Any) {
