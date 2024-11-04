@@ -12,17 +12,17 @@ import SwiftUI
 public struct ContentView: EventObservableViewProtocol {
     public let viweId = "ContentView"
     public typealias ViewModel = ContentViewViewModel
-    @ObservedObject public var viewModel: ViewModel
+    @MainActor @ObservedObject public var viewModel: ViewModel
     private let lock = NSLock()
     @State private var navigationPath: [Destination] = []
     @MainActor private let navigationRouter: NavigationRouter
 
-    public init(viewModel: ViewModel, navigationRouter: NavigationRouter) {
+    @MainActor public init(viewModel: ViewModel, navigationRouter: NavigationRouter) {
         self.viewModel = viewModel
         self.navigationRouter = navigationRouter
     }
 
-    public var body: some View {
+    @MainActor public var body: some View {
         NavigationStack(path: $navigationPath) {
             NavigationStack(path: $navigationPath) {
                 NavigationContent()
@@ -42,7 +42,7 @@ public struct ContentView: EventObservableViewProtocol {
 }
 
 extension ContentView {
-    fileprivate func NavigationContent() -> some View {
+    @MainActor fileprivate func NavigationContent() -> some View {
         VStack {
             Header()
             EventListView(
@@ -56,11 +56,7 @@ extension ContentView {
 }
 
 extension ContentView {
-    fileprivate func onReceiveEventHandler(_ newEvent: Published<Event>.Publisher.Output) {
-        defer {
-            lock.unlock()
-        }
-        lock.lock()
+    @MainActor fileprivate func onReceiveEventHandler(_ newEvent: Published<Event>.Publisher.Output) {
         if case let .stateUpdated(state) = newEvent {
             if navigationPath.contains(state.toDestination()) {
                 navigationPath = []
