@@ -10,10 +10,11 @@ import EventsDomain
 import SwiftUI
 
 public struct ContentView: EventObservableViewProtocol {
-    public let viweId = String(describing: type(of: Self.self))
+    public let viweId = "ContentView"
     public typealias ViewModel = ContentViewViewModel
     @MainActor @ObservedObject public var viewModel: ViewModel
-    @MainActor @State private var navigationPath: [Destination] = []
+    private let lock = NSLock()
+    @State private var navigationPath: [Destination] = []
     @MainActor private let navigationRouter: NavigationRouter
 
     @MainActor public init(viewModel: ViewModel, navigationRouter: NavigationRouter) {
