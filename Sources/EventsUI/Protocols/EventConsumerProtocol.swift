@@ -224,8 +224,6 @@ public protocol EventConsumerProtocol: AnyObject, ObservableObject {
     @MainActor func buttonTap()
 }
 
-private let lock = NSLock()
-
 extension EventConsumerProtocol {
     public var title: String { "Base" }
     public var buttonTitle: String { "Send Event" }
@@ -259,10 +257,9 @@ extension EventConsumerProtocol {
         receivedEvent(value)
         isProcessing = value.isProcessing
         receivedValue = value
-        lock.lock()
         receivedValues.append(value)
-        lock.unlock()
     }
+
     @MainActor
     public func proccessAction(_ action: Action) {
         emitter?.proccessAction(action)
