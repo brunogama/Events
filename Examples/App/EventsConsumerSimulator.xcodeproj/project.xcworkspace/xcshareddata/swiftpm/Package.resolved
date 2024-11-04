@@ -1,0 +1,15 @@
+{
+  "originHash" : "04ca44e5bad99e1d81917f9560736126d6907feb938a993e087ba6323a1c5bec",
+  "pins" : [
+    {
+      "identity" : "events",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/brunogama/Events/",
+      "state" : {
+        "branch" : "main",
+        "revision" : "7f8a52aaad2a043d0487cffd667938874917c122"
+      }
+    }
+  ],
+  "version" : 3
+}
