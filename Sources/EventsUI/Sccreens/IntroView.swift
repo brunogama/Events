@@ -11,14 +11,14 @@ import EventsDomain
 import SwiftUI
 
 public struct IntroView: View {
-    @StateObject public var viewModel: IntroViewModel
-    @State private var currentDestination: Destination? = nil
+    @MainActor @StateObject public var viewModel: IntroViewModel
+    @MainActor @State private var currentDestination: Destination? = nil
 
-    public init(viewModel: IntroViewModel) {
+    @MainActor public init(viewModel: IntroViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
 
-    public var body: some View {
+    @MainActor public var body: some View {
         Content()
             .onAppear {
                 viewModel.registerActiveView(viewId)
@@ -37,7 +37,7 @@ public class IntroViewModel: EventConsumerBaseViewModel {
 
     public override var image: String { "sparkles" }
 
-    public func receive(_ value: Event) {
+    @MainActor public func receive(_ value: Event) {
         print("\(String(describing: type(of: self))) received: \(String(describing: value))")
     }
 }

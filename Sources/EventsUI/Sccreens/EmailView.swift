@@ -10,11 +10,11 @@ import EventsCommons
 import EventsDomain
 import SwiftUI
 
-public struct EmailView: View {
-    @StateObject public var viewModel: EmailViewModel
+@MainActor public struct EmailView: View {
+    public var viewModel: EmailViewModel
     @State private var currentDestination: Destination? = nil
 
-    public var body: some View {
+    @MainActor public var body: some View {
         Content()
             .onAppear {
                 viewModel.registerActiveView(viewId)

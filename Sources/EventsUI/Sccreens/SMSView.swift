@@ -11,10 +11,10 @@ import EventsDomain
 import SwiftUI
 
 public struct SMSView: View {
-    @StateObject public var viewModel: SMSViewModel
-    @State private var currentDestination: Destination? = nil
+    @MainActor @StateObject public var viewModel: SMSViewModel
+    @MainActor @State private var currentDestination: Destination? = nil
 
-    public var body: some View {
+    @MainActor public var body: some View {
         Content()
             .onAppear {
                 viewModel.registerActiveView(viewId)

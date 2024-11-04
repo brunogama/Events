@@ -11,10 +11,10 @@ import EventsDomain
 import SwiftUI
 
 public struct OnboardingView: View {
-    @StateObject public var viewModel: OnboardingViewModel
-    @State private var currentDestination: Destination? = nil
+    @MainActor @StateObject public var viewModel: OnboardingViewModel
+    @MainActor @State private var currentDestination: Destination? = nil
 
-    public var body: some View {
+    @MainActor public var body: some View {
         Content()
             .onAppear {
                 viewModel.registerActiveView(viewId)

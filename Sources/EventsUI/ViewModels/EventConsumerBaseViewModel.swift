@@ -10,14 +10,15 @@ import EventsCommons
 import EventsDomain
 import Foundation
 
+@MainActor
 open class EventConsumerBaseViewModel: EventConsumerProtocol, ObservableObject {
     @Published private(set) public var event: Event = .idle
     public var cancellables: Set<AnyCancellable> = []
     public var action: Action { fatalError("should override") }
 
-    @MainActor @Published public var receivedValues: [Event] = []
-    @MainActor @Published public var receivedValue: Event = .idle
-    @MainActor @Published public var isProcessing: Bool = false
+    @Published public var receivedValues: [Event] = []
+    @Published public var receivedValue: Event = .idle
+    @Published public var isProcessing: Bool = false
     public var emitter: EventSender?
     public var title: String { "Base" }
     public var buttonTitle: String { "Send Event" }

@@ -13,11 +13,11 @@ import SwiftUI
 public struct DoneView: View {
     @StateObject public var viewModel: ViewModel
 
-    public init(viewModel: ViewModel) {
+    @MainActor public init(viewModel: ViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
 
-    public var body: some View {
+    @MainActor public var body: some View {
         Content()
             .onAppear {
                 viewModel.registerActiveView(viewId)
@@ -36,7 +36,7 @@ public class DoneViewModel: EventConsumerBaseViewModel {
 
     override public var image: String { "checkmark.circle.fill" }
 
-    public func receive(_ value: Event) {
+    @MainActor public func receive(_ value: Event) {
         print("\(String(describing: type(of: self))) received: \(String(describing: value).reversed())")
     }
 }
