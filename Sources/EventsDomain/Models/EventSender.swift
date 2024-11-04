@@ -9,11 +9,10 @@ import Combine
 import EventsCommons
 import Foundation
 
-public class EventSender: @unchecked Sendable {
+public final class EventSender {
     private var cancellables = Set<AnyCancellable>()
     private let stateSubject = PassthroughSubject<Event, Never>()
     private var activeViews: Set<String> = []
-    private let lock = NSLock()
 
     public init() {}
 
@@ -51,6 +50,7 @@ public class EventSender: @unchecked Sendable {
             .stateUpdated(registerState),
             .currentState(registerState),
         ]
+
         Task {
             for event in eventsSimulation {
                 await Task.delayFor(seconds: event.simulationDelay)
@@ -58,7 +58,7 @@ public class EventSender: @unchecked Sendable {
             }
         }
     }
-    
+
     @MainActor
     public func createPublisher(for viewId: String) -> AnyPublisher<Event, Never> {
         Logger.info("Binding no id`1 \(viewId)")
@@ -73,17 +73,17 @@ public class EventSender: @unchecked Sendable {
             .eraseToAnyPublisher()
     }
 
-    public func registerActiveView(_ viewId: String) {
+    @MainActor public func registerActiveView(_ viewId: String) {
         Logger.info("Adicionando a lista de subscription \(viewId)")
         activeViews.insert(viewId)
     }
 
-    public func unregisterView(_ viewId: String) {
+    @MainActor public func unregisterView(_ viewId: String) {
         Logger.info("Removendo da lista de subscription \(viewId)")
         activeViews.remove(viewId)
     }
 
-    private func isViewActive(_ viewId: String) -> Bool {
+    @MainActor private func isViewActive(_ viewId: String) -> Bool {
         activeViews.contains(viewId)
     }
 }

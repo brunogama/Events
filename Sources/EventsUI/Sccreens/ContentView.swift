@@ -33,9 +33,11 @@ public struct ContentView: EventObservableViewProtocol {
             .onReceive(viewModel.$receivedValue) { newEvent in
                 onReceiveEventHandler(newEvent)
             }
-        }.onAppear {
+        }
+        .onAppear {
             viewModel.registerActiveView(viewId)
-        }.onDisappear {
+        }
+        .onDisappear {
             viewModel.unregisterView(viewId)
         }
     }
@@ -62,7 +64,7 @@ extension ContentView {
                 navigationPath = []
                 return
             }
-        
+
             navigationPath.append(state.toDestination())
         }
     }

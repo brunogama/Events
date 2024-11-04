@@ -12,7 +12,7 @@ import SwiftUI
 @MainActor
 public struct EventRow: View {
     public let event: Event
-    
+
     public init(event: Event) {
         self.event = event
     }

@@ -5,7 +5,6 @@
 //  Created by Bruno on 02/11/24.
 //
 
-@MainActor 
 public struct Devices: Equatable, Sendable {
     public var devices: [String]
 
@@ -13,7 +12,7 @@ public struct Devices: Equatable, Sendable {
         self.devices = devices
     }
 
-    public static func mock() -> Devices {
+    @MainActor public static func mock() -> Devices {
         Devices(devices: ["iPhone", "iPad", "MacBook"])
     }
 }

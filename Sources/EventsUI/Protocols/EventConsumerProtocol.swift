@@ -216,10 +216,10 @@ public protocol EventConsumerProtocol: AnyObject, ObservableObject {
     var buttonTitle: String { get }
     var renderInputTextField: Bool { get }
 
-   func registerActiveView(_ viewId: String)
-   func unregisterView(_ viewId: String)
-   func receivedEvent(_ event: Event)
-   func appendEvent(_ value: Event)
+    func registerActiveView(_ viewId: String)
+    func unregisterView(_ viewId: String)
+    func receivedEvent(_ event: Event)
+    func appendEvent(_ value: Event)
     func proccessAction(_ action: Action)
     func buttonTap()
 }

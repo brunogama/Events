@@ -42,7 +42,7 @@ public final class Logger {
         self.subsystem = subsystem
         self.category = category
         self.osLog = OSLog(subsystem: subsystem, category: category)
-        self.queue = DispatchQueue(label: "com.logger.\(subsystem).\(category)", qos: .utility)
+        self.queue = DispatchQueue(label: "com.logger.\(subsystem).\(category)", qos: .background)
     }
 
     private static func log(

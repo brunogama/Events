@@ -8,34 +8,9 @@
 import EventsCommons
 import Foundation
 
-
 public enum RegisterState: RawRepresentable, Equatable, Hashable, ReflectableDescription, Identifiable, Sendable {
-    private enum Constants {
-        @MainActor public static let salt: String = {
-            var random: RandomNumberGenerator = SystemRandomNumberGenerator()
-            let salt = (0...5)
-                .compactMap { _ in
-                    UUID().uuidString
-                }
-                .joined()
-                .shuffled(using: &random)
-                .map { String($0) }
-                .joined()
-
-            return salt
-        }()
-    }
-    
-    @MainActor public var id: Int {
-        guard
-            let saltByteCpunt = Constants.salt.data(using: .utf8)?.count,
-            let uuidByteCount = UUID().uuidString.data(using: .utf8)?.count,
-            let instanceInformationbyteCount = instanceDescription.data(using: .utf8)?.count
-        else {
-            return UUID().uuidString.count + instanceDescription.count + (0...Int.max).randomElement()!
-        }
-
-        return uuidByteCount + instanceInformationbyteCount + saltByteCpunt
+    public var id: String {
+        UUID().uuidString + instanceDescription
     }
 
     case none
@@ -71,16 +46,14 @@ public enum RegisterState: RawRepresentable, Equatable, Hashable, ReflectableDes
         hasher.combine(instanceDescription)
     }
 
-    #if DEBUG
-        @MainActor
-        public static func mockDone() -> RegisterState {
-            .done(
-                account: "account",
-                password: "password",
-                response: .mock()
-            )
-        }
-    #endif
+    @MainActor
+    public static func mockDone() -> RegisterState {
+        .done(
+            account: "account",
+            password: "password",
+            response: .mock()
+        )
+    }
 }
 
 extension RegisterState {

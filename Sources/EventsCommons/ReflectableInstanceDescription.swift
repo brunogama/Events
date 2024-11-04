@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ReflectableInstanceDescription: CustomStringConvertible, Hashable, Equatable {
+public struct ReflectableInstanceDescription: CustomStringConvertible, Hashable, Equatable, Sendable {
     public let description: String
 
     public init(_ value: Any) {
@@ -43,8 +43,6 @@ package final class ValueDescriptionBuilder: Sendable {
         StructClassHandler(),
         DefaultHandler(),
     ]
-
-    package let queue = DispatchQueue(label: "ValueDescriptionBuilder")
 
     private init() {}
 

@@ -8,7 +8,6 @@
 import EventsCommons
 import Foundation
 
-
 public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Sendable {
     public var id: String {
         UUID().uuidString + instanceDescription

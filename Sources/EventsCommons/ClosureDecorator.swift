@@ -38,6 +38,7 @@ import Foundation
 ///    }
 ///}
 ///  ```
+
 public func closureDecorator<each T, R>(
     _ closure: @escaping (repeat each T) -> R,
     with decorator: @escaping (@escaping (repeat each T) -> R, repeat each T) -> R
