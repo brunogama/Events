@@ -11,8 +11,8 @@ import EventsDomain
 import SwiftUI
 
 public struct SMSView: View {
-    @MainActor @StateObject public var viewModel: SMSViewModel
-    @MainActor @State private var currentDestination: Destination? = nil
+    @StateObject public var viewModel: SMSViewModel
+    @State private var currentDestination: Destination? = nil
 
     @MainActor public var body: some View {
         Content()
@@ -37,5 +37,5 @@ public class SMSViewModel: EventConsumerBaseViewModel {
 
     public var renderInputTextField: Bool { true }
 
-    @Published public var token: String = ""
+    @MainActor @Published public var token: String = ""
 }

@@ -205,23 +205,23 @@ import SwiftUI
 
 @MainActor
 public protocol EventConsumerProtocol: AnyObject, ObservableObject {
-    @MainActor var event: Event { get }
+    var event: Event { get }
     var cancellables: Set<AnyCancellable> { get set }
     var action: Action { get }
-    @MainActor var receivedValue: Event { get set }
-    @MainActor var isProcessing: Bool { get set }
-    @MainActor var receivedValues: [Event] { get set }
+    var receivedValue: Event { get set }
+    var isProcessing: Bool { get set }
+    var receivedValues: [Event] { get set }
     var emitter: EventSender? { get set }
     var title: String { get }
     var buttonTitle: String { get }
     var renderInputTextField: Bool { get }
 
-    @MainActor func registerActiveView(_ viewId: String)
-    @MainActor func unregisterView(_ viewId: String)
-    @MainActor func receivedEvent(_ event: Event)
-    @MainActor func appendEvent(_ value: Event)
+   func registerActiveView(_ viewId: String)
+   func unregisterView(_ viewId: String)
+   func receivedEvent(_ event: Event)
+   func appendEvent(_ value: Event)
     func proccessAction(_ action: Action)
-    @MainActor func buttonTap()
+    func buttonTap()
 }
 
 extension EventConsumerProtocol {
@@ -272,6 +272,7 @@ extension EventConsumerProtocol {
 
     @MainActor
     public func unbind() {
+        Logger.info("Executando unbind do ViewModel \(String(describing: type(of: self)))")
         cancellables.removeAll()
     }
 }

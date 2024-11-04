@@ -9,15 +9,15 @@ import EventsCommons
 import EventsDomain
 import SwiftUI
 
-
+@MainActor
 public struct EventRow: View {
-    @MainActor public let event: Event
+    public let event: Event
     
-    @MainActor public init(event: Event) {
+    public init(event: Event) {
         self.event = event
     }
 
-    @MainActor  public var body: some View {
+    public var body: some View {
         HStack {
             Image(systemName: event.icon)
                 .font(.title2)

@@ -9,14 +9,14 @@ import EventsCommons
 import EventsDomain
 import SwiftUI
 
+@MainActor
 public struct EventListView: View {
-    @MainActor @Binding public var events: [Event]
-
-    @MainActor public var body: some View {
-        ScrollViewReader { scrollViewProxy in
+    @Binding public var events: [Event]
+    public var body: some View {
+        ScrollViewReader { @MainActor scrollViewProxy in
             ScrollView {
                 LazyVStack(spacing: 16) {
-                    ForEach(events) { event in
+                    ForEach(events) { @MainActor event in
                         EventRow(event: event)
                             .padding(.horizontal)
                     }
@@ -27,18 +27,15 @@ public struct EventListView: View {
                 }
                 .padding(.vertical)
                 .onAppear {
-                    DispatchQueue.main.async {
-                        scrollViewProxy.scrollTo("bottom", anchor: .bottom)
-                    }
+                    scrollViewProxy.scrollTo("bottom", anchor: .bottom)
                 }
                 .onChange(of: events, initial: true) {
-                    DispatchQueue.main.async {
-                        scrollViewProxy.scrollTo("bottom", anchor: .bottom)
-                    }
+                    scrollViewProxy.scrollTo("bottom", anchor: .bottom)
                 }
             }
             .background(Color.dynamicBackground.ignoresSafeArea())
-        }.onAppear {
+        }
+        .onAppear {
             events = []
         }
     }
