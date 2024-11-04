@@ -27,7 +27,7 @@ public struct ContentView: EventObservableViewProtocol {
             NavigationStack(path: $navigationPath) {
                 NavigationContent()
             }
-            .navigationDestination(for: Destination.self) { destination in
+            .navigationDestination(for: Destination.self) { @MainActor destination in
                 AnyView(navigationRouter.navigateTo(destination))
             }
             .onReceive(viewModel.$receivedValue) { newEvent in
