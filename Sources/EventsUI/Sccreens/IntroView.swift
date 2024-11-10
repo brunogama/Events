@@ -11,26 +11,23 @@ import EventsDomain
 import SwiftUI
 
 public struct IntroView: View {
-    @MainActor @StateObject public var viewModel: IntroViewModel
-    @MainActor @State private var currentDestination: Destination? = nil
+    @StateObject public var viewModel: IntroViewModel
+    @State private var currentDestination: Destination? = nil
 
-    @MainActor public init(viewModel: IntroViewModel) {
+    public init(viewModel: IntroViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
 
-    @MainActor public var body: some View {
-        Content()
-            .onAppear {
-                viewModel.registerActiveView(viewId)
-            }
+    public var body: some View {
+        content
             .onDisappear {
-                viewModel.unregisterView(viewId)
+                viewModel.unregisterActive()
             }
             .padding()
     }
 }
 
-public class IntroViewModel: EventConsumerBaseViewModel {
+public class IntroViewModel: BaseEventListenerViewModel {
     public override var action: Action { .passIntro }
 
     public override var title: String { "IntroView" }

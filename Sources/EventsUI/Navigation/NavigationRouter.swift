@@ -11,10 +11,10 @@ import EventsDomain
 import SwiftUI
 
 public final class NavigationRouter {
-    private let eventSender: EventSender
+    private let eventBroadcaster: EventBroadCoaster
 
-    public init(eventSender: EventSender) {
-        self.eventSender = eventSender
+    public init(eventBroadcaster: EventBroadCoaster) {
+        self.eventBroadcaster = eventBroadcaster
     }
 
     @MainActor
@@ -23,25 +23,25 @@ public final class NavigationRouter {
     ) -> any View {
         switch destination {
         case .intro:
-            let viewModel = IntroViewModel(emitter: eventSender)
+            let viewModel = IntroViewModel(eventBroadcaster: eventBroadcaster)
             return IntroView(viewModel: viewModel)
         case .onboarding:
-            let viewModel = OnboardingViewModel(emitter: eventSender)
+            let viewModel = OnboardingViewModel(eventBroadcaster: eventBroadcaster)
             return OnboardingView(viewModel: viewModel)
         case .done:
-            let viewModel = DoneViewModel(emitter: eventSender)
+            let viewModel = DoneViewModel(eventBroadcaster: eventBroadcaster)
             return DoneView(viewModel: viewModel)
         case .removeDevices:
-            let viewModel = RemoveDevicesViewModel(emitter: eventSender)
+            let viewModel = RemoveDevicesViewModel(eventBroadcaster: eventBroadcaster)
             return RemoveDevicesView(viewModel: viewModel)
         case .liveness:
-            let viewModel = LivenessViewModel(emitter: eventSender)
+            let viewModel = LivenessViewModel(eventBroadcaster: eventBroadcaster)
             return LivenessView(viewModel: viewModel)
         case .sms:
-            let viewModel = SMSViewModel(emitter: eventSender)
+            let viewModel = SMSViewModel(eventBroadcaster: eventBroadcaster)
             return SMSView(viewModel: viewModel)
         case .email:
-            let viewModel = EmailViewModel(emitter: eventSender)
+            let viewModel = EmailViewModel(eventBroadcaster: eventBroadcaster)
             return EmailView(viewModel: viewModel)
         case .none:
             return EmptyView()

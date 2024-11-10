@@ -13,12 +13,12 @@ public struct LoadingButton: View {
     public typealias ButtonAction = (() -> Void)?
 
     public let title: String
-    @MainActor @Binding public var isLoading: Bool
-    @MainActor public let action: ButtonAction
+    @Binding public var isLoading: Bool
+    public let action: ButtonAction
 
-    @MainActor public init(
+    public init(
         title: String,
-        isLoading: Binding<Bool> = .constant(false),
+        isLoading: Binding<Bool>,
         action: ButtonAction
     ) {
         self.title = title
@@ -26,8 +26,8 @@ public struct LoadingButton: View {
         self.action = action
     }
 
-    @MainActor public var body: some View {
-        Button(action: { @MainActor in
+    public var body: some View {
+        Button(action: { 
             if !isLoading {
                 action?()
             }

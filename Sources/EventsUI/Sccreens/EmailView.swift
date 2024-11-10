@@ -15,12 +15,9 @@ import SwiftUI
     @State private var currentDestination: Destination? = nil
 
     @MainActor public var body: some View {
-        Content()
-            .onAppear {
-                viewModel.registerActiveView(viewId)
-            }
+        content
             .onDisappear {
-                viewModel.unregisterView(viewId)
+                viewModel.unregisterActive()
             }
             .padding()
     }

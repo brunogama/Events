@@ -15,44 +15,33 @@ protocol EventObservableViewProtocol: HasViewModelEventConsumerProtocol, Identif
 
 extension EventObservableViewProtocol {
 
-    @MainActor public func Content() -> some View {
+    var content: some View {
         VStack {
-            Header()
-            EventList()
-            Spacer()
-            StateFullButton()
-        }
-    }
-
-    @MainActor public func EventList() -> some View {
-        EventListView(
-            events: Binding<[Event]>(
-                get: { viewModel.receivedValues },
-                set: { _ in }
-            )
-        )
-    }
-
-    @MainActor public func Header() -> some View {
-        VStack {
-            Image(systemName: viewModel.receivedValue.icon)
+            Image(systemName: viewModel.event.icon)
                 .font(.system(size: 60))
                 .foregroundStyle(.tint)
 
             Text(viewModel.title)
                 .titleStyle(with: viewModel.title)
-        }
-    }
-
-    @MainActor public func StateFullButton() -> some View {
-        LoadingButton(
-            title: viewModel.title,
-            isLoading: Binding<Bool>(
-                get: { viewModel.isProcessing },
-                set: { _ in }
+            
+            EventListView(
+                events: Binding<[Event]>(
+                    get: { viewModel.receivedValues },
+                    set: { _ in }
+                )
             )
-        ) {
-            viewModel.buttonTap()
+            
+            Spacer()
+            
+            LoadingButton(
+                title: viewModel.title,
+                isLoading: Binding<Bool>(
+                    get: { viewModel.event.isProcessing },
+                    set: { _ in }
+                )
+            ) {
+                viewModel.buttonTap()
+            }
         }
     }
 }

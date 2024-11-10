@@ -10,7 +10,7 @@ import EventsDomain
 import SwiftUI
 
 public protocol HasViewModelEventConsumerProtocol: View, IdentifiableView {
-    associatedtype ViewModel: EventConsumerProtocol
+    associatedtype ViewModel: EventListenerProtocol
 
     var viewModel: ViewModel { get }
 }

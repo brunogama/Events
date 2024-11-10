@@ -11,22 +11,19 @@ import EventsDomain
 import SwiftUI
 
 public struct OnboardingView: View {
-    @MainActor @StateObject public var viewModel: OnboardingViewModel
-    @MainActor @State private var currentDestination: Destination? = nil
+    @StateObject public var viewModel: OnboardingViewModel
+    @State private var currentDestination: Destination? = nil
 
-    @MainActor public var body: some View {
-        Content()
-            .onAppear {
-                viewModel.registerActiveView(viewId)
-            }
+    public var body: some View {
+        content
             .onDisappear {
-                viewModel.unregisterView(viewId)
+                viewModel.unregisterActive()
             }
             .padding()
     }
 }
 
-public class OnboardingViewModel: EventConsumerBaseViewModel {
+public class OnboardingViewModel: BaseEventListenerViewModel {
     override public var action: Action { .passOnboarding }
     override public var title: String { "OnboardingView" }
     override public var image: String { "person.crop.circle.badge.checkmark" }

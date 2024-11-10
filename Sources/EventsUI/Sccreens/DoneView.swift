@@ -13,30 +13,23 @@ import SwiftUI
 public struct DoneView: View {
     @StateObject public var viewModel: ViewModel
 
-    @MainActor public init(viewModel: ViewModel) {
+    public init(viewModel: ViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
 
-    @MainActor public var body: some View {
-        Content()
-            .onAppear {
-                viewModel.registerActiveView(viewId)
-            }
+    public var body: some View {
+        content
             .onDisappear {
-                viewModel.unregisterView(viewId)
+                viewModel.unregisterActive()
             }
             .padding()
     }
 }
 
-public class DoneViewModel: EventConsumerBaseViewModel {
+public class DoneViewModel: BaseEventListenerViewModel {
     override public var action: Action { .passDone }
 
     override public var title: String { "DoneView" }
 
     override public var image: String { "checkmark.circle.fill" }
-
-    @MainActor public func receive(_ value: Event) {
-        print("\(String(describing: type(of: self))) received: \(String(describing: value).reversed())")
-    }
 }

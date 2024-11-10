@@ -11,22 +11,19 @@ import EventsDomain
 import SwiftUI
 
 public struct RemoveDevicesView: View {
-    @MainActor @StateObject public var viewModel: RemoveDevicesViewModel
-    @MainActor @State private var currentDestination: Destination? = nil
+    @StateObject public var viewModel: RemoveDevicesViewModel
+    @State private var currentDestination: Destination? = nil
 
-    @MainActor public var body: some View {
-        Content()
-            .onAppear {
-                viewModel.registerActiveView(viewId)
-            }
+    public var body: some View {
+        content
             .onDisappear {
-                viewModel.unregisterView(viewId)
+                viewModel.unregisterActive()
             }
             .padding()
     }
 }
 
-public class RemoveDevicesViewModel: EventConsumerBaseViewModel {
+public class RemoveDevicesViewModel: BaseEventListenerViewModel {
     override public var action: Action { .removeDevices(.mock()) }
     override public var title: String { "RemoveDevicesView" }
     override public var image: String { "xmark.circle.fill" }

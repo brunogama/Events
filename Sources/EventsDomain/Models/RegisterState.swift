@@ -46,7 +46,6 @@ public enum RegisterState: RawRepresentable, Equatable, Hashable, ReflectableDes
         hasher.combine(instanceDescription)
     }
 
-    @MainActor
     public static func mockDone() -> RegisterState {
         .done(
             account: "account",
@@ -57,7 +56,6 @@ public enum RegisterState: RawRepresentable, Equatable, Hashable, ReflectableDes
 }
 
 extension RegisterState {
-    @MainActor
     public func toDestination() -> Destination {
         switch self {
         case .none: .none

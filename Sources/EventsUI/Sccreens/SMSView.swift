@@ -14,19 +14,16 @@ public struct SMSView: View {
     @StateObject public var viewModel: SMSViewModel
     @State private var currentDestination: Destination? = nil
 
-    @MainActor public var body: some View {
-        Content()
-            .onAppear {
-                viewModel.registerActiveView(viewId)
-            }
+    public var body: some View {
+        content
             .onDisappear {
-                viewModel.unregisterView(viewId)
+                viewModel.unregisterActive()
             }
             .padding()
     }
 }
 
-public class SMSViewModel: EventConsumerBaseViewModel {
+public class SMSViewModel: BaseEventListenerViewModel {
     override public var action: Action { .smsToken(token) }
 
     override public var title: String { "SMSView" }
@@ -37,5 +34,5 @@ public class SMSViewModel: EventConsumerBaseViewModel {
 
     public var renderInputTextField: Bool { true }
 
-    @MainActor @Published public var token: String = ""
+    @Published public var token: String = ""
 }

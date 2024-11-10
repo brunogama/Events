@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Response: Codable, Sendable {
+public struct Response: Equatable, Sendable , Codable, Hashable {
     public var status: String
     public var message: String
     public var data: Data
@@ -20,7 +20,6 @@ public struct Response: Codable, Sendable {
         self.code = code
     }
 
-    @MainActor
     public static func mock() -> Response {
         Response(status: "OK", message: "Success", data: Data(), code: 200)
     }

@@ -15,8 +15,8 @@ import SwiftUI
 struct EventsOnCombineApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView(
-                viewModel: ContentViewViewModel(emitter: CompositionRoot.shared.eventSender),
+            RootView(
+                viewModel: .init(eventBroadcaster: CompositionRoot.shared.eventSender),
                 navigationRouter: CompositionRoot.shared.navigationRouter
             )
         }
@@ -26,11 +26,11 @@ struct EventsOnCombineApp: App {
 struct CompositionRoot {
     static let shared = CompositionRoot()
 
-    let eventSender: EventSender
+    let eventSender: EventBroadCoaster
     let navigationRouter: NavigationRouter
 
     init() {
-        self.eventSender = EventSender()
-        self.navigationRouter = NavigationRouter(eventSender: eventSender)
+        self.eventSender = EventBroadCoaster()
+        self.navigationRouter = NavigationRouter(eventBroadcaster: eventSender)
     }
 }

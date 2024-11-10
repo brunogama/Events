@@ -35,7 +35,7 @@ public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Se
         hasher.combine(instanceDescription)
     }
 
-    @MainActor public var isProcessing: Bool {
+    public var isProcessing: Bool {
         switch self {
         case .loading: return true
         case .startProcessing: return true
@@ -44,11 +44,11 @@ public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Se
         }
     }
 
-    @MainActor public var isIdle: Bool {
+    public var isIdle: Bool {
         self == .idle
     }
 
-    @MainActor public var willTransition: Bool {
+    public var willTransition: Bool {
         switch self {
         case .willUpdateState: return true
         case .stateUpdated: return true
@@ -56,7 +56,7 @@ public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Se
         }
     }
 
-    @MainActor public var isDone: Bool {
+    public var isDone: Bool {
         if case let .currentState(state) = self,
             case .done = state
         {
@@ -65,21 +65,21 @@ public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Se
         return false
     }
 
-    @MainActor public var hasError: Error? {
+    public var hasError: Error? {
         if case let .error(error) = self {
             return error
         }
         return nil
     }
 
-    @MainActor public var currentState: RegisterState? {
+    public var currentState: RegisterState? {
         if case let .currentState(state) = self {
             return state
         }
         return nil
     }
 
-    @MainActor public var simulationDelay: Int {
+    public var simulationDelay: Int {
         switch self {
         case .loading: return 1
         case .startProcessing: return 0
@@ -91,7 +91,7 @@ public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Se
         }
     }
 
-    @MainActor public var icon: String {
+    public var icon: String {
         switch self {
         case .idle:
             return "pause.circle"

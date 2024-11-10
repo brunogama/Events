@@ -11,22 +11,19 @@ import EventsDomain
 import SwiftUI
 
 public struct LivenessView: View {
-    @MainActor @StateObject public var viewModel: LivenessViewModel
-    @MainActor @State private var currentDestination: Destination? = nil
+    @StateObject public var viewModel: LivenessViewModel
+    @State private var currentDestination: Destination? = nil
 
     @MainActor public var body: some View {
-        Content()
-            .onAppear {
-                viewModel.registerActiveView(viewId)
-            }
+        content
             .onDisappear {
-                viewModel.unregisterView(viewId)
+                viewModel.unregisterActive()
             }
             .padding()
     }
 }
 
-public class LivenessViewModel: EventConsumerBaseViewModel {
+public class LivenessViewModel: BaseEventListenerViewModel {
     override public var action: Action { .starLiveness }
     override public var title: String { "LivenessView" }
     override public var image: String { "eye.fill" }
