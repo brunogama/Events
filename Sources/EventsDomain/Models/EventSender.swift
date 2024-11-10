@@ -41,20 +41,25 @@ public final class EventSender {
         }
     }
 
-    @MainActor
-    private func fakeActionProcessing(_ registerState: RegisterState) {
+    @MainActor private func fakeActionProcessing(_ registerState: RegisterState) {
         let eventsSimulation = [
             Event.startProcessing,
             .loading,
             .willUpdateState(registerState),
             .stateUpdated(registerState),
-            .currentState(registerState),
         ]
-
+        
         Task {
-            for event in eventsSimulation {
-                await Task.delayFor(seconds: event.simulationDelay)
-                emit(event)
+            await withTaskGroup(of: Void.self) { group in
+                for event in eventsSimulation {
+                    group.addTask {
+                        await Task.delayFor(seconds: event.simulationDelay)
+                        await MainActor.run {
+                            self.emit(event)
+                        }
+                    }
+                    await group.next()
+                }
             }
         }
     }

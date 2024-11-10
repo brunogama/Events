@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		152E81372CD8175100AB3066 /* EventsCommons in Frameworks */ = {isa = PBXBuildFile; productRef = 152E81362CD8175100AB3066 /* EventsCommons */; };
-		152E81392CD8175100AB3066 /* EventsDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 152E81382CD8175100AB3066 /* EventsDomain */; };
-		152E813B2CD8175100AB3066 /* EventsServices in Frameworks */ = {isa = PBXBuildFile; productRef = 152E813A2CD8175100AB3066 /* EventsServices */; };
-		152E813D2CD8175100AB3066 /* EventsUI in Frameworks */ = {isa = PBXBuildFile; productRef = 152E813C2CD8175100AB3066 /* EventsUI */; };
+		158C99DE2CE147EA0001713E /* EventsCommons in Frameworks */ = {isa = PBXBuildFile; productRef = 158C99DD2CE147EA0001713E /* EventsCommons */; };
+		158C99E02CE147EA0001713E /* EventsDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 158C99DF2CE147EA0001713E /* EventsDomain */; };
+		158C99E22CE147EA0001713E /* EventsServices in Frameworks */ = {isa = PBXBuildFile; productRef = 158C99E12CE147EA0001713E /* EventsServices */; };
+		158C99E42CE147EA0001713E /* EventsUI in Frameworks */ = {isa = PBXBuildFile; productRef = 158C99E32CE147EA0001713E /* EventsUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -39,10 +39,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				152E81372CD8175100AB3066 /* EventsCommons in Frameworks */,
-				152E81392CD8175100AB3066 /* EventsDomain in Frameworks */,
-				152E813B2CD8175100AB3066 /* EventsServices in Frameworks */,
-				152E813D2CD8175100AB3066 /* EventsUI in Frameworks */,
+				158C99DE2CE147EA0001713E /* EventsCommons in Frameworks */,
+				158C99E02CE147EA0001713E /* EventsDomain in Frameworks */,
+				158C99E22CE147EA0001713E /* EventsServices in Frameworks */,
+				158C99E42CE147EA0001713E /* EventsUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,10 +86,10 @@
 			);
 			name = EventsConsumerSimulator;
 			packageProductDependencies = (
-				152E81362CD8175100AB3066 /* EventsCommons */,
-				152E81382CD8175100AB3066 /* EventsDomain */,
-				152E813A2CD8175100AB3066 /* EventsServices */,
-				152E813C2CD8175100AB3066 /* EventsUI */,
+				158C99DD2CE147EA0001713E /* EventsCommons */,
+				158C99DF2CE147EA0001713E /* EventsDomain */,
+				158C99E12CE147EA0001713E /* EventsServices */,
+				158C99E32CE147EA0001713E /* EventsUI */,
 			);
 			productName = EventsCombine;
 			productReference = 158330EE2CD7F22D005B6828 /* EventsConsumerSimulator.app */;
@@ -121,7 +121,7 @@
 			mainGroup = 158330E52CD7F22C005B6828;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				152E81352CD8175100AB3066 /* XCRemoteSwiftPackageReference "Events" */,
+				158C99DC2CE147EA0001713E /* XCLocalSwiftPackageReference "../../../EnventConsumerSimulation" */,
 			);
 			productRefGroup = 158330EF2CD7F22D005B6828 /* Products */;
 			projectDirPath = "";
@@ -361,36 +361,28 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		152E81352CD8175100AB3066 /* XCRemoteSwiftPackageReference "Events" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/brunogama/Events/";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		158C99DC2CE147EA0001713E /* XCLocalSwiftPackageReference "../../../EnventConsumerSimulation" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../../EnventConsumerSimulation;
 		};
-/* End XCRemoteSwiftPackageReference section */
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		152E81362CD8175100AB3066 /* EventsCommons */ = {
+		158C99DD2CE147EA0001713E /* EventsCommons */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 152E81352CD8175100AB3066 /* XCRemoteSwiftPackageReference "Events" */;
 			productName = EventsCommons;
 		};
-		152E81382CD8175100AB3066 /* EventsDomain */ = {
+		158C99DF2CE147EA0001713E /* EventsDomain */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 152E81352CD8175100AB3066 /* XCRemoteSwiftPackageReference "Events" */;
 			productName = EventsDomain;
 		};
-		152E813A2CD8175100AB3066 /* EventsServices */ = {
+		158C99E12CE147EA0001713E /* EventsServices */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 152E81352CD8175100AB3066 /* XCRemoteSwiftPackageReference "Events" */;
 			productName = EventsServices;
 		};
-		152E813C2CD8175100AB3066 /* EventsUI */ = {
+		158C99E32CE147EA0001713E /* EventsUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 152E81352CD8175100AB3066 /* XCRemoteSwiftPackageReference "Events" */;
 			productName = EventsUI;
 		};
 /* End XCSwiftPackageProductDependency section */
