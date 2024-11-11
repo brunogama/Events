@@ -12,6 +12,8 @@ import Foundation
 public final class EventBroadCoaster {
     private let eventBroadcasterSubject = PassthroughSubject<Event, Never>()
     private var lastEvent: Event = .idle
+    private var cleanupCancellable: AnyCancellable?
+
     private var activeConsumers: [String: WeakBox] = [:] {
         didSet {
             cleanupStaleReferences()
@@ -21,6 +23,7 @@ public final class EventBroadCoaster {
     private final class WeakBox {
         weak var value: (any IdentifiableObservableObjectProtocol)?
         let timestamp: Date
+        var lastEventTimestamp: Date?
 
         init(_ value: any IdentifiableObservableObjectProtocol) {
             self.value = value
@@ -32,7 +35,9 @@ public final class EventBroadCoaster {
         }
     }
 
-    public init() {}
+    public init() {
+        setupPeriodicCleanup()
+    }
 
     @MainActor public func emit(_ event: Event) {
         lastEvent = event
@@ -87,32 +92,27 @@ public final class EventBroadCoaster {
     ) -> SubscriptionToken {
         cleanupStaleReferences()
 
-        // Cancel existing subscription if any
-        if let existingBox = activeConsumers[owner.objectId], existingBox.value === owner {
-            Logger.debug("Replacing existing subscription for: \(owner.objectId)")
-        }
-
         let token = SubscriptionToken()
-        activeConsumers[owner.objectId] = WeakBox(owner)
+        let box = WeakBox(owner)
+        activeConsumers[owner.objectId] = box
 
         let cancellable =
             eventBroadcasterSubject
             .receive(on: DispatchQueue.main)
-            .handleEvents(receiveCancel: { [weak self, weak owner] in
-                guard let self = self,
-                    let owner = owner
-                else { return }
-
-                self.activeConsumers.removeValue(forKey: owner.objectId)
-                Logger.debug("Subscription cancelled for: \(owner.objectId)")
-            })
+            .handleEvents(
+                receiveOutput: { [weak box] _ in
+                    box?.lastEventTimestamp = Date()
+                },
+                receiveCancel: { [weak self, weak owner] in
+                    guard let owner = owner else { return }
+                    self?.activeConsumers.removeValue(forKey: owner.objectId)
+                }
+            )
             .filter { [weak owner] _ in
-                // Only deliver events if the owner is still alive
                 owner != nil
             }
             .sink { [weak owner] event in
                 guard let owner = owner else { return }
-                Logger.debug("Processing event for: \(owner.objectId)")
                 handler(event)
             }
 
@@ -120,22 +120,27 @@ public final class EventBroadCoaster {
         return token
     }
 
+    private func setupPeriodicCleanup() {
+        cleanupCancellable = Timer.publish(every: 30, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                self?.cleanupStaleReferences()
+            }
+    }
+
     private func cleanupStaleReferences() {
         let staleKeys = activeConsumers.filter { $0.value.isStale }.keys
         staleKeys.forEach { activeConsumers.removeValue(forKey: $0) }
-
+        
+        #if DEBUG
         if !staleKeys.isEmpty {
-            Logger.debug("Cleaned up \(staleKeys.count) stale references")
+            print("Cleaned up \(staleKeys.count) stale references")
         }
+        #endif
     }
-
-    #if DEBUG
-        public func getCurrentState() -> Event {
-            lastEvent
-        }
-
-        public func getActiveConsumerCount() -> Int {
-            activeConsumers.count
-        }
-    #endif
+    
+    deinit {
+        cleanupCancellable?.cancel()
+        cleanupCancellable = nil
+    }
 }
