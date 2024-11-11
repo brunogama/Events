@@ -21,6 +21,8 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
 
     private var subscriptionToken: SubscriptionToken?
     private var cleanupCancellable: AnyCancellable?
+    private var completedStateFlags: StateFlags = []
+    private var currentDependency: DeferredDependency?
 
     public init(eventBroadcaster: EventBroadCoaster) {
         self.eventBroadcaster = eventBroadcaster
@@ -39,21 +41,62 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
         self.event = event
         receivedValues.append(event)
 
-        if case .stateUpdated(let registerState) = event {
-            // Cancel any existing cleanup
-            cleanupCancellable?.cancel()
-
-            // Create new cleanup task
-            cleanupCancellable = Just(())
-                .delay(for: .seconds(0.5), scheduler: DispatchQueue.main)
-                .sink { [weak self] _ in
-                    self?.unregisterActive()
-                }
+        if case .stateUpdated(let newState) = event {
+            handleStateTransition(for: newState)
         }
     }
 
+    private func handleStateTransition(for state: RegisterState) {
+        completedStateFlags.insert(state.stateFlag)
+
+        let dependency = state.deferredDependency
+        if case .none = dependency {
+            unregisterActive()
+            return
+        }
+
+        if currentDependency == nil {
+            currentDependency = dependency
+        }
+
+        if isDependencySatisfied() {
+            unregisterActive()
+        }
+
+        #if DEBUG
+            logDependencyStatus()
+        #endif
+    }
+
+    private func isDependencySatisfied() -> Bool {
+        guard let dependency = currentDependency else { return true }
+
+        switch dependency {
+        case .none:
+            return true
+
+        case .all(let flags):
+            return completedStateFlags.contains(flags)
+
+        case .any(let flags):
+            return !completedStateFlags.intersection(flags).isEmpty
+
+        case .either(let flags1, let flags2):
+            return completedStateFlags.contains(flags1) || completedStateFlags.contains(flags2)
+        }
+    }
+
+    #if DEBUG
+        private func logDependencyStatus() {
+            print("Completed states: \(completedStateFlags)")
+            print("Dependencies satisfied: \(isDependencySatisfied())")
+        }
+    #endif
+
     open func unregisterActive() {
         Logger.debug("Unregistering \(self)")
+        completedStateFlags = []
+        currentDependency = nil
         subscriptionToken?.cancel()
         subscriptionToken = nil
         cleanupCancellable?.cancel()

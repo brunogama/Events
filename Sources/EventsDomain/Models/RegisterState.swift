@@ -53,6 +53,27 @@ public enum RegisterState: RawRepresentable, Equatable, Hashable, ReflectableDes
             response: .mock()
         )
     }
+
+    public var stateFlag: StateFlags {
+        switch self {
+        case .none: return .none
+        case .intro: return .intro
+        case .onboarding: return .onboarding
+        case .done: return .done
+        case .removeDevices: return .removeDevices
+        case .liveness: return .liveness
+        case .sms: return .sms
+        case .email: return .email
+        }
+    }
+
+    public var deferredDependency: DeferredDependency {
+        switch self {
+        case .liveness: return .all([.sms, .email])
+        default: return .none
+        }
+    }
+
 }
 
 extension RegisterState {
@@ -68,4 +89,28 @@ extension RegisterState {
         case .email: .email
         }
     }
+}
+
+public struct StateFlags: OptionSet {
+    public let rawValue: Int
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+
+    public static let none = StateFlags(rawValue: 1 << 0)
+    public static let intro = StateFlags(rawValue: 1 << 1)
+    public static let onboarding = StateFlags(rawValue: 1 << 2)
+    public static let done = StateFlags(rawValue: 1 << 3)
+    public static let removeDevices = StateFlags(rawValue: 1 << 4)
+    public static let liveness = StateFlags(rawValue: 1 << 5)
+    public static let sms = StateFlags(rawValue: 1 << 6)
+    public static let email = StateFlags(rawValue: 1 << 7)
+}
+
+public enum DeferredDependency {
+    case all(StateFlags)
+    case any(StateFlags)
+    case either(StateFlags, StateFlags)
+    case none
 }

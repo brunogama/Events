@@ -24,14 +24,15 @@ public final class EventBroadCoaster {
         weak var value: (any IdentifiableObservableObjectProtocol)?
         let timestamp: Date
         var lastEventTimestamp: Date?
-
+        var pendingDependency: DeferredDependency?
+        
         init(_ value: any IdentifiableObservableObjectProtocol) {
             self.value = value
             self.timestamp = Date()
         }
-
+        
         var isStale: Bool {
-            value == nil
+            value == nil && pendingDependency == nil
         }
     }
 
@@ -87,38 +88,41 @@ public final class EventBroadCoaster {
     }
 
     public func subscribe(
-        owner: any IdentifiableObservableObjectProtocol,
-        handler: @escaping (Event) -> Void
-    ) -> SubscriptionToken {
-        cleanupStaleReferences()
-
-        let token = SubscriptionToken()
-        let box = WeakBox(owner)
-        activeConsumers[owner.objectId] = box
-
-        let cancellable =
-            eventBroadcasterSubject
-            .receive(on: DispatchQueue.main)
-            .handleEvents(
-                receiveOutput: { [weak box] _ in
-                    box?.lastEventTimestamp = Date()
-                },
-                receiveCancel: { [weak self, weak owner] in
-                    guard let owner = owner else { return }
-                    self?.activeConsumers.removeValue(forKey: owner.objectId)
+            owner: any IdentifiableObservableObjectProtocol,
+            handler: @escaping (Event) -> Void
+        ) -> SubscriptionToken {
+            
+            cleanupStaleReferences()
+            
+            let token = SubscriptionToken()
+            let box = WeakBox(owner)
+            activeConsumers[owner.objectId] = box
+            
+            let cancellable = eventBroadcasterSubject
+                .receive(on: DispatchQueue.main)
+                .handleEvents(
+                    receiveOutput: { [weak box] event in
+                        box?.lastEventTimestamp = Date()
+                        if case .stateUpdated(let state) = event {
+                            box?.pendingDependency = state.deferredDependency
+                        }
+                    },
+                    receiveCancel: { [weak self, weak owner] in
+                        guard let owner = owner else { return }
+                        self?.activeConsumers.removeValue(forKey: owner.objectId)
+                    }
+                )
+                .filter { [weak owner] _ in
+                    owner != nil
                 }
-            )
-            .filter { [weak owner] _ in
-                owner != nil
-            }
-            .sink { [weak owner] event in
-                guard let owner = owner else { return }
-                handler(event)
-            }
-
-        token.store(cancellable)
-        return token
-    }
+                .sink { [weak owner] event in
+                    guard let owner = owner else { return }
+                    handler(event)
+                }
+            
+            token.store(cancellable)
+            return token
+        }
 
     private func setupPeriodicCleanup() {
         cleanupCancellable = Timer.publish(every: 30, on: .main, in: .common)
@@ -129,14 +133,9 @@ public final class EventBroadCoaster {
     }
 
     private func cleanupStaleReferences() {
-        let staleKeys = activeConsumers.filter { $0.value.isStale }.keys
-        staleKeys.forEach { activeConsumers.removeValue(forKey: $0) }
+        let staleKeys = activeConsumers.filter({ $0.value.isStale }).keys
         
-        #if DEBUG
-        if !staleKeys.isEmpty {
-            print("Cleaned up \(staleKeys.count) stale references")
-        }
-        #endif
+        staleKeys.forEach { activeConsumers.removeValue(forKey: $0) }
     }
     
     deinit {
