@@ -23,22 +23,16 @@ extension EventObservableViewProtocol {
 
             Text(viewModel.title)
                 .titleStyle(with: viewModel.title)
-            
+
             EventListView(
-                events: Binding<[Event]>(
-                    get: { viewModel.receivedValues },
-                    set: { _ in }
-                )
+                events: .constant(viewModel.receivedValues)
             )
-            
+
             Spacer()
-            
+
             LoadingButton(
                 title: viewModel.title,
-                isLoading: Binding<Bool>(
-                    get: { viewModel.event.isProcessing },
-                    set: { _ in }
-                )
+                isLoading: .constant(viewModel.event.isProcessing)
             ) {
                 viewModel.buttonTap()
             }

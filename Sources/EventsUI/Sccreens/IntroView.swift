@@ -12,7 +12,6 @@ import SwiftUI
 
 public struct IntroView: View {
     @StateObject public var viewModel: IntroViewModel
-    @State private var currentDestination: Destination? = nil
 
     public init(viewModel: IntroViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -20,9 +19,6 @@ public struct IntroView: View {
 
     public var body: some View {
         content
-            .onDisappear {
-                viewModel.unregisterActive()
-            }
             .padding()
     }
 }

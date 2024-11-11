@@ -16,7 +16,10 @@ public struct RootView: EventObservableViewProtocol {
     @State private var navigationPath: [Destination] = []
     private let navigationRouter: NavigationRouter
 
-    public init(viewModel: ViewModel, navigationRouter: NavigationRouter) {
+    public init(
+        viewModel: ViewModel,
+        navigationRouter: NavigationRouter
+    ) {
         self.viewModel = viewModel
         self.navigationRouter = navigationRouter
     }
@@ -24,7 +27,7 @@ public struct RootView: EventObservableViewProtocol {
     public var body: some View {
         NavigationStack(path: $navigationPath) {
             NavigationStack(path: $navigationPath) {
-                navigationContent
+                content
             }
             .navigationDestination(for: Destination.self) { newDestination in
                 AnyView(navigationRouter.navigateTo(newDestination))
@@ -33,27 +36,21 @@ public struct RootView: EventObservableViewProtocol {
                 onReceiveEventHandler(newEvent)
             }
         }
-        .onDisappear {
-            viewModel.unregisterActive()
-        }
     }
 }
 
 extension RootView {
-    var navigationContent: some View {
-        content
-        .padding()
-    }
-}
-
-private extension RootView {
-    func onReceiveEventHandler(_ newEvent: Published<Event>.Publisher.Output) {
+    private func onReceiveEventHandler(_ newEvent: Published<Event>.Publisher.Output) {
+        viewModel.receivedValues = []
         if case let .stateUpdated(state) = newEvent {
             if navigationPath.contains(state.toDestination()) {
+                viewModel.isActive = true
+                viewModel.receivedValues = []
                 navigationPath = []
                 return
             }
 
+            viewModel.isActive = false
             navigationPath.append(state.toDestination())
         }
     }
@@ -62,7 +59,21 @@ private extension RootView {
 public class RoootViewViewModel: BaseEventListenerViewModel {
     override public var title: String { "Event Testing App" }
     override public var action: Action { .passIntro }
-    
+
+    public var isActive: Bool = true
+
+    public override func registerEvent(_ event: Event) {
+        if isActive {
+            self.event = event
+            receivedValues.append(event)
+        }
+        else {
+            receivedValues = []
+            self.event = event
+        }
+    }
+
     override public func unregisterActive() {
     }
+
 }

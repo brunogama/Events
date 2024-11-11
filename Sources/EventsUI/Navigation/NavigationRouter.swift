@@ -17,7 +17,7 @@ public final class NavigationRouter {
         self.eventBroadcaster = eventBroadcaster
     }
 
-    @MainActor
+    @ViewBuilder
     public func navigateTo(
         _ destination: Destination
     ) -> any View {

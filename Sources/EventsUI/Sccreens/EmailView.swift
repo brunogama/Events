@@ -12,13 +12,9 @@ import SwiftUI
 
 @MainActor public struct EmailView: View {
     public var viewModel: EmailViewModel
-    @State private var currentDestination: Destination? = nil
 
     @MainActor public var body: some View {
         content
-            .onDisappear {
-                viewModel.unregisterActive()
-            }
             .padding()
     }
 }

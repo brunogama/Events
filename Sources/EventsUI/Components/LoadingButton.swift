@@ -27,7 +27,7 @@ public struct LoadingButton: View {
     }
 
     public var body: some View {
-        Button(action: { 
+        Button(action: {
             if !isLoading {
                 action?()
             }

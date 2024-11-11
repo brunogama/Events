@@ -12,13 +12,9 @@ import SwiftUI
 
 public struct LivenessView: View {
     @StateObject public var viewModel: LivenessViewModel
-    @State private var currentDestination: Destination? = nil
 
     @MainActor public var body: some View {
         content
-            .onDisappear {
-                viewModel.unregisterActive()
-            }
             .padding()
     }
 }

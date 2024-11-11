@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Response: Equatable, Sendable , Codable, Hashable {
+public struct Response: Equatable, Sendable, Codable, Hashable {
     public var status: String
     public var message: String
     public var data: Data

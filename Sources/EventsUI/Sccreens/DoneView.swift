@@ -19,9 +19,6 @@ public struct DoneView: View {
 
     public var body: some View {
         content
-            .onDisappear {
-                viewModel.unregisterActive()
-            }
             .padding()
     }
 }

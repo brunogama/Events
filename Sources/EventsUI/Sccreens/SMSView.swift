@@ -12,13 +12,9 @@ import SwiftUI
 
 public struct SMSView: View {
     @StateObject public var viewModel: SMSViewModel
-    @State private var currentDestination: Destination? = nil
 
     public var body: some View {
         content
-            .onDisappear {
-                viewModel.unregisterActive()
-            }
             .padding()
     }
 }

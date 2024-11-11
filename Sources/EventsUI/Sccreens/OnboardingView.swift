@@ -12,13 +12,9 @@ import SwiftUI
 
 public struct OnboardingView: View {
     @StateObject public var viewModel: OnboardingViewModel
-    @State private var currentDestination: Destination? = nil
 
     public var body: some View {
         content
-            .onDisappear {
-                viewModel.unregisterActive()
-            }
             .padding()
     }
 }

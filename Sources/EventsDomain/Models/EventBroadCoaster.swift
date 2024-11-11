@@ -11,22 +11,34 @@ import Foundation
 
 public final class EventBroadCoaster {
     private let eventBroadcasterSubject = PassthroughSubject<Event, Never>()
-    private var activeConsumers: [String: WeakBox] = [:]
-    
-    private class WeakBox {
-        weak var value: (any IdentifiableObservableObjectProtocol)?
-        
-        init(_ value: any IdentifiableObservableObjectProtocol) {
-            self.value = value
+    private var lastEvent: Event = .idle
+    private var activeConsumers: [String: WeakBox] = [:] {
+        didSet {
+            cleanupStaleReferences()
         }
     }
-    
+
+    private final class WeakBox {
+        weak var value: (any IdentifiableObservableObjectProtocol)?
+        let timestamp: Date
+
+        init(_ value: any IdentifiableObservableObjectProtocol) {
+            self.value = value
+            self.timestamp = Date()
+        }
+
+        var isStale: Bool {
+            value == nil
+        }
+    }
+
     public init() {}
-    
+
     @MainActor public func emit(_ event: Event) {
+        lastEvent = event
         eventBroadcasterSubject.send(event)
     }
-    
+
     public func proccessAction(_ action: Action) {
         switch action {
         case .passIntro:
@@ -45,7 +57,7 @@ public final class EventBroadCoaster {
             fakeActionProcessing(.mockDone())
         }
     }
-    
+
     private func fakeActionProcessing(_ registerState: RegisterState) {
         let eventsSimulation = [
             Event.startProcessing,
@@ -53,7 +65,7 @@ public final class EventBroadCoaster {
             .willUpdateState(registerState),
             .stateUpdated(registerState),
         ]
-        
+
         Task {
             await withTaskGroup(of: Void.self) { group in
                 for event in eventsSimulation {
@@ -73,30 +85,57 @@ public final class EventBroadCoaster {
         owner: any IdentifiableObservableObjectProtocol,
         handler: @escaping (Event) -> Void
     ) -> SubscriptionToken {
+        cleanupStaleReferences()
+
+        // Cancel existing subscription if any
+        if let existingBox = activeConsumers[owner.objectId], existingBox.value === owner {
+            Logger.debug("Replacing existing subscription for: \(owner.objectId)")
+        }
+
         let token = SubscriptionToken()
-        
         activeConsumers[owner.objectId] = WeakBox(owner)
-        
-        let cancellable = eventBroadcasterSubject
+
+        let cancellable =
+            eventBroadcasterSubject
             .receive(on: DispatchQueue.main)
-            .filter { [weak self, weak owner] _ in
-                guard let owner = owner, let self, self.activeConsumers[owner.objectId]?.value != nil else {
-                    return false
-                }
-                return true
-            }
             .handleEvents(receiveCancel: { [weak self, weak owner] in
-                guard let owner = owner else { return }
-                self?.activeConsumers.removeValue(forKey: owner.objectId)
-                Logger.info("Consumer removed: \(owner.objectId)")
+                guard let self = self,
+                    let owner = owner
+                else { return }
+
+                self.activeConsumers.removeValue(forKey: owner.objectId)
+                Logger.debug("Subscription cancelled for: \(owner.objectId)")
             })
+            .filter { [weak owner] _ in
+                // Only deliver events if the owner is still alive
+                owner != nil
+            }
             .sink { [weak owner] event in
                 guard let owner = owner else { return }
-                Logger.info("Processing event for: \(owner.objectId)")
+                Logger.debug("Processing event for: \(owner.objectId)")
                 handler(event)
             }
-        
+
         token.store(cancellable)
         return token
     }
+
+    private func cleanupStaleReferences() {
+        let staleKeys = activeConsumers.filter { $0.value.isStale }.keys
+        staleKeys.forEach { activeConsumers.removeValue(forKey: $0) }
+
+        if !staleKeys.isEmpty {
+            Logger.debug("Cleaned up \(staleKeys.count) stale references")
+        }
+    }
+
+    #if DEBUG
+        public func getCurrentState() -> Event {
+            lastEvent
+        }
+
+        public func getActiveConsumerCount() -> Int {
+            activeConsumers.count
+        }
+    #endif
 }

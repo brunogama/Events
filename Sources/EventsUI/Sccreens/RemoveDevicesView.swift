@@ -12,13 +12,9 @@ import SwiftUI
 
 public struct RemoveDevicesView: View {
     @StateObject public var viewModel: RemoveDevicesViewModel
-    @State private var currentDestination: Destination? = nil
 
     public var body: some View {
         content
-            .onDisappear {
-                viewModel.unregisterActive()
-            }
             .padding()
     }
 }
