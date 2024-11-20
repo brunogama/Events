@@ -9,41 +9,79 @@ import EventsCommons
 import EventsDomain
 import SwiftUI
 
-public class NavigationObservableDestination: ObservableObject {
-    @Published public var state: RegisterState = .none
-}
-
 public struct RootView: View {
-
     @State private var navigationPath: [Destination] = []
     private let navigationRouter: NavigationRouter
-    @ObservedObject public var navigationHandler = NavigationObservableDestination()
+    @StateObject private var navigationHandler = NavigationObservableDestination()
 
-    public init(
-        navigationRouter: NavigationRouter
-    ) {
+    public init(navigationRouter: NavigationRouter) {
         self.navigationRouter = navigationRouter
     }
 
     public var body: some View {
         NavigationStack(path: $navigationPath) {
-            AnyView(navigationRouter.navigateTo(.intro, navigationObservableDestination: navigationHandler))
-            .navigationDestination(for: Destination.self) { newDestination in
-                AnyView(navigationRouter.navigateTo(newDestination, navigationObservableDestination: navigationHandler))
+            IntroViewContainer(
+                navigationRouter: navigationRouter,
+                navigationHandler: navigationHandler
+            )
+            .navigationDestination(for: Destination.self) { destination in
+                DestinationViewContainer(
+                    destination: destination,
+                    navigationRouter: navigationRouter,
+                    navigationHandler: navigationHandler
+                )
             }
         }
-        .onReceive(navigationHandler.$state) { state in
-            if case .none = state {
-                return
-            }
-        
+        .onChange(of: navigationHandler.state) { newState in
+            handleNavigationStateChange(newState)
+        }
+    }
+
+    private func handleNavigationStateChange(_ state: RegisterState) {
+        switch state {
+        case .none:
+            return
+        default:
             let destination = state.toDestination()
-            if navigationPath.count(where: { $0 == .onboarding }) > 1 {
-                navigationPath = []
-            } else {
-                navigationPath.append(destination)
-            }
+            handleNavigation(to: destination)
         }
-        
+    }
+
+    private func handleNavigation(to destination: Destination) {
+        if destination == .onboarding && navigationPath.contains(.onboarding) {
+            navigationPath.removeAll()
+        }
+        else {
+            navigationPath.append(destination)
+        }
+    }
+}
+
+private struct IntroViewContainer: View {
+    let navigationRouter: NavigationRouter
+    let navigationHandler: NavigationObservableDestination
+
+    var body: some View {
+        AnyView(
+            navigationRouter.navigateTo(
+                .intro,
+                navigationObservableDestination: navigationHandler
+            )
+        )
+    }
+}
+
+private struct DestinationViewContainer: View {
+    let destination: Destination
+    let navigationRouter: NavigationRouter
+    let navigationHandler: NavigationObservableDestination
+
+    var body: some View {
+        AnyView(
+            navigationRouter.navigateTo(
+                destination,
+                navigationObservableDestination: navigationHandler
+            )
+        )
     }
 }
