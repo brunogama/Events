@@ -11,37 +11,11 @@ import Foundation
 
 public final class EventBroadCoaster {
     private let eventBroadcasterSubject = PassthroughSubject<Event, Never>()
-    private var lastEvent: Event = .idle
     private var cleanupCancellable: AnyCancellable?
 
-    private var activeConsumers: [String: WeakBox] = [:] {
-        didSet {
-            cleanupStaleReferences()
-        }
-    }
+    public init() {}
 
-    private final class WeakBox {
-        weak var value: (any IdentifiableObservableObjectProtocol)?
-        let timestamp: Date
-        var lastEventTimestamp: Date?
-        var pendingDependency: DeferredDependency?
-        
-        init(_ value: any IdentifiableObservableObjectProtocol) {
-            self.value = value
-            self.timestamp = Date()
-        }
-        
-        var isStale: Bool {
-            value == nil && pendingDependency == nil
-        }
-    }
-
-    public init() {
-        setupPeriodicCleanup()
-    }
-
-    @MainActor public func emit(_ event: Event) {
-        lastEvent = event
+    public func emit(_ event: Event) {
         eventBroadcasterSubject.send(event)
     }
 
@@ -66,9 +40,7 @@ public final class EventBroadCoaster {
 
     private func fakeActionProcessing(_ registerState: RegisterState) {
         let eventsSimulation = [
-            Event.startProcessing,
-            .loading,
-            .willUpdateState(registerState),
+            Event.loading,
             .stateUpdated(registerState),
         ]
 
@@ -76,7 +48,7 @@ public final class EventBroadCoaster {
             await withTaskGroup(of: Void.self) { group in
                 for event in eventsSimulation {
                     group.addTask {
-                        await Task.delayFor(seconds: event.simulationDelay)
+                        await Task.delayFor(seconds: Int.random(in: 0...2))
                         await MainActor.run {
                             self.emit(event)
                         }
@@ -84,6 +56,7 @@ public final class EventBroadCoaster {
                     await group.next()
                 }
             }
+            await Task.delayFor(seconds: 1)
         }
     }
 
@@ -92,29 +65,10 @@ public final class EventBroadCoaster {
             handler: @escaping (Event) -> Void
         ) -> SubscriptionToken {
             
-            cleanupStaleReferences()
-            
             let token = SubscriptionToken()
-            let box = WeakBox(owner)
-            activeConsumers[owner.objectId] = box
             
             let cancellable = eventBroadcasterSubject
                 .receive(on: DispatchQueue.main)
-                .handleEvents(
-                    receiveOutput: { [weak box] event in
-                        box?.lastEventTimestamp = Date()
-                        if case .stateUpdated(let state) = event {
-                            box?.pendingDependency = state.deferredDependency
-                        }
-                    },
-                    receiveCancel: { [weak self, weak owner] in
-                        guard let owner = owner else { return }
-                        self?.activeConsumers.removeValue(forKey: owner.objectId)
-                    }
-                )
-                .filter { [weak owner] _ in
-                    owner != nil
-                }
                 .sink { [weak owner] event in
                     guard let owner = owner else { return }
                     handler(event)
@@ -123,20 +77,6 @@ public final class EventBroadCoaster {
             token.store(cancellable)
             return token
         }
-
-    private func setupPeriodicCleanup() {
-        cleanupCancellable = Timer.publish(every: 30, on: .main, in: .common)
-            .autoconnect()
-            .sink { [weak self] _ in
-                self?.cleanupStaleReferences()
-            }
-    }
-
-    private func cleanupStaleReferences() {
-        let staleKeys = activeConsumers.filter({ $0.value.isStale }).keys
-        
-        staleKeys.forEach { activeConsumers.removeValue(forKey: $0) }
-    }
     
     deinit {
         cleanupCancellable?.cancel()

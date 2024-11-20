@@ -17,7 +17,7 @@ extension EventObservableViewProtocol {
 
     var content: some View {
         VStack {
-            Image(systemName: viewModel.event.icon)
+            Image(systemName: viewModel.image)
                 .font(.system(size: 60))
                 .foregroundStyle(.tint)
 

@@ -19,6 +19,7 @@ public protocol EventListenerProtocol: IdentifiableObservableObjectProtocol {
     var title: String { get }
     var buttonTitle: String { get }
     var image: String { get }
+    var navigationDestinationObserver: NavigationObservableDestination { get }
     func registerActive()
     func registerEvent(_ event: Event)
     func unregisterActive()

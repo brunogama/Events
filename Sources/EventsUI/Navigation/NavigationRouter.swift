@@ -19,29 +19,30 @@ public final class NavigationRouter {
 
     @ViewBuilder
     public func navigateTo(
-        _ destination: Destination
+        _ destination: Destination,
+        navigationObservableDestination: NavigationObservableDestination
     ) -> any View {
         switch destination {
         case .intro:
-            let viewModel = IntroViewModel(eventBroadcaster: eventBroadcaster)
+            let viewModel = IntroViewModel(eventBroadcaster: eventBroadcaster, navigationDestinationObserver: navigationObservableDestination)
             return IntroView(viewModel: viewModel)
         case .onboarding:
-            let viewModel = OnboardingViewModel(eventBroadcaster: eventBroadcaster)
+            let viewModel = OnboardingViewModel(eventBroadcaster: eventBroadcaster, navigationDestinationObserver: navigationObservableDestination)
             return OnboardingView(viewModel: viewModel)
         case .done:
-            let viewModel = DoneViewModel(eventBroadcaster: eventBroadcaster)
+            let viewModel = DoneViewModel(eventBroadcaster: eventBroadcaster, navigationDestinationObserver: navigationObservableDestination)
             return DoneView(viewModel: viewModel)
         case .removeDevices:
-            let viewModel = RemoveDevicesViewModel(eventBroadcaster: eventBroadcaster)
+            let viewModel = RemoveDevicesViewModel(eventBroadcaster: eventBroadcaster, navigationDestinationObserver: navigationObservableDestination)
             return RemoveDevicesView(viewModel: viewModel)
         case .liveness:
-            let viewModel = LivenessViewModel(eventBroadcaster: eventBroadcaster)
+            let viewModel = LivenessViewModel(eventBroadcaster: eventBroadcaster, navigationDestinationObserver: navigationObservableDestination)
             return LivenessView(viewModel: viewModel)
         case .sms:
-            let viewModel = SMSViewModel(eventBroadcaster: eventBroadcaster)
+            let viewModel = SMSViewModel(eventBroadcaster: eventBroadcaster, navigationDestinationObserver: navigationObservableDestination)
             return SMSView(viewModel: viewModel)
         case .email:
-            let viewModel = EmailViewModel(eventBroadcaster: eventBroadcaster)
+            let viewModel = EmailViewModel(eventBroadcaster: eventBroadcaster, navigationDestinationObserver: navigationObservableDestination)
             return EmailView(viewModel: viewModel)
         case .none:
             return EmptyView()

@@ -13,6 +13,7 @@ import Foundation
 open class BaseEventListenerViewModel: EventListenerProtocol {
     @Published public var receivedValues: [Event] = []
     @Published public var event: Event = .idle
+    private(set) public var navigationDestinationObserver: NavigationObservableDestination
     public let eventBroadcaster: EventBroadCoaster
     open var action: Action { .passDone }
     open var title: String { "" }
@@ -20,18 +21,21 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
     open var image: String { "" }
 
     private var subscriptionToken: SubscriptionToken?
-    private var cleanupCancellable: AnyCancellable?
     private var completedStateFlags: StateFlags = []
     private var currentDependency: DeferredDependency?
 
-    public init(eventBroadcaster: EventBroadCoaster) {
+    public init(
+        eventBroadcaster: EventBroadCoaster,
+        navigationDestinationObserver: NavigationObservableDestination
+    ) {
+        self.navigationDestinationObserver = navigationDestinationObserver
         self.eventBroadcaster = eventBroadcaster
         registerActive()
     }
 
     public func registerActive() {
-        subscriptionToken?.cancel()
-        guard subscriptionToken == nil else { return }
+//        subscriptionToken?.cancel()
+//        guard subscriptionToken == nil else { return }
         subscriptionToken = eventBroadcaster.subscribe(owner: self) { [weak self] newEvent in
             self?.registerEvent(newEvent)
         }
@@ -42,6 +46,7 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
         receivedValues.append(event)
 
         if case .stateUpdated(let newState) = event {
+            navigationDestinationObserver.state = newState
             handleStateTransition(for: newState)
         }
     }
@@ -99,8 +104,6 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
         currentDependency = nil
         subscriptionToken?.cancel()
         subscriptionToken = nil
-        cleanupCancellable?.cancel()
-        cleanupCancellable = nil
     }
 
     public func buttonTap() {

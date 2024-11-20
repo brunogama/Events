@@ -15,10 +15,7 @@ import SwiftUI
 struct EventsOnCombineApp: App {
     var body: some Scene {
         WindowGroup {
-            RootView(
-                viewModel: .init(eventBroadcaster: CompositionRoot.shared.eventSender),
-                navigationRouter: CompositionRoot.shared.navigationRouter
-            )
+            RootView(navigationRouter: CompositionRoot.shared.navigationRouter)
         }
     }
 }
