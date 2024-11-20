@@ -15,7 +15,7 @@ public protocol EventListenerProtocol: IdentifiableObservableObjectProtocol {
     var event: Event { get }
     var action: Action { get }
     var receivedValues: [Event] { get set }
-    var eventBroadcaster: EventBroadCoaster { get }
+    var eventBroadcaster: EventBroadCoaster? { get }
     var title: String { get }
     var buttonTitle: String { get }
     var image: String { get }

@@ -13,33 +13,6 @@ import SwiftUI
 protocol EventObservableViewProtocol: HasViewModelEventConsumerProtocol, IdentifiableView {
 }
 
-extension EventObservableViewProtocol {
-
-    var content: some View {
-        VStack {
-            Image(systemName: viewModel.image)
-                .font(.system(size: 60))
-                .foregroundStyle(.tint)
-
-            Text(viewModel.title)
-                .titleStyle(with: viewModel.title)
-
-            EventListView(
-                events: .constant(viewModel.receivedValues)
-            )
-
-            Spacer()
-
-            LoadingButton(
-                title: viewModel.title,
-                isLoading: .constant(viewModel.event.isProcessing)
-            ) {
-                viewModel.buttonTap()
-            }
-        }
-    }
-}
-
 extension DoneView: EventObservableViewProtocol {
     public typealias ViewModel = DoneViewModel
 }

@@ -13,13 +13,8 @@ import SwiftUI
 public struct DoneView: View {
     @StateObject public var viewModel: ViewModel
 
-    public init(viewModel: ViewModel) {
-        self._viewModel = StateObject(wrappedValue: viewModel)
-    }
-
     public var body: some View {
-        content
-            .padding()
+        EventConsumerView(viewModel: viewModel)
     }
 }
 

@@ -11,7 +11,6 @@ import Foundation
 
 public final class EventBroadCoaster {
     private let eventBroadcasterSubject = PassthroughSubject<Event, Never>()
-    private var cleanupCancellable: AnyCancellable?
 
     public init() {}
 
@@ -40,7 +39,8 @@ public final class EventBroadCoaster {
 
     private func fakeActionProcessing(_ registerState: RegisterState) {
         let eventsSimulation = [
-            Event.loading,
+            Event.startProcessing,
+            .loading,
             .stateUpdated(registerState),
         ]
 
@@ -48,7 +48,7 @@ public final class EventBroadCoaster {
             await withTaskGroup(of: Void.self) { group in
                 for event in eventsSimulation {
                     group.addTask {
-                        await Task.delayFor(seconds: Int.random(in: 0...2))
+                        await Task.delayFor(for: event.simulationDelay)
                         await MainActor.run {
                             self.emit(event)
                         }
@@ -77,9 +77,4 @@ public final class EventBroadCoaster {
             token.store(cancellable)
             return token
         }
-    
-    deinit {
-        cleanupCancellable?.cancel()
-        cleanupCancellable = nil
-    }
 }

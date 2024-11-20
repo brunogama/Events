@@ -10,12 +10,11 @@ import EventsCommons
 import EventsDomain
 import SwiftUI
 
-@MainActor public struct EmailView: View {
+public struct EmailView: View {
     public var viewModel: EmailViewModel
 
-    @MainActor public var body: some View {
-        content
-            .padding()
+    public var body: some View {
+        EventConsumerView(viewModel: viewModel)
     }
 }
 

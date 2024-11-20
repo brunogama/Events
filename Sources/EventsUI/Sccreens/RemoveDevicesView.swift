@@ -14,8 +14,7 @@ public struct RemoveDevicesView: View {
     @StateObject public var viewModel: RemoveDevicesViewModel
 
     public var body: some View {
-        content
-            .padding()
+        EventConsumerView(viewModel: viewModel)
     }
 }
 

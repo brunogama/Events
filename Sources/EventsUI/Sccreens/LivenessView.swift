@@ -13,9 +13,8 @@ import SwiftUI
 public struct LivenessView: View {
     @StateObject public var viewModel: LivenessViewModel
 
-    @MainActor public var body: some View {
-        content
-            .padding()
+    public var body: some View {
+        EventConsumerView(viewModel: viewModel)
     }
 }
 

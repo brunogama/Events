@@ -14,8 +14,7 @@ public struct SMSView: View {
     @StateObject public var viewModel: SMSViewModel
 
     public var body: some View {
-        content
-            .padding()
+        EventConsumerView(viewModel: viewModel)
     }
 }
 

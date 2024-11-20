@@ -14,7 +14,7 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
     @Published public var receivedValues: [Event] = []
     @Published public var event: Event = .idle
     private(set) public var navigationDestinationObserver: NavigationObservableDestination
-    public let eventBroadcaster: EventBroadCoaster
+    public private(set) weak var eventBroadcaster: EventBroadCoaster?
     open var action: Action { .passDone }
     open var title: String { "" }
     open var buttonTitle: String { "" }
@@ -36,6 +36,8 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
     public func registerActive() {
 //        subscriptionToken?.cancel()
 //        guard subscriptionToken == nil else { return }
+//        Logger.debug("🔌 Registering \(self)")
+        guard let eventBroadcaster else { return }
         subscriptionToken = eventBroadcaster.subscribe(owner: self) { [weak self] newEvent in
             self?.registerEvent(newEvent)
         }
@@ -99,7 +101,7 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
     #endif
 
     open func unregisterActive() {
-        Logger.debug("Unregistering \(self)")
+//        Logger.debug("Unregistering \(self)")
         completedStateFlags = []
         currentDependency = nil
         subscriptionToken?.cancel()
@@ -111,10 +113,11 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
     }
 
     private func proccessAction() {
-        eventBroadcaster.proccessAction(action)
+        eventBroadcaster?.proccessAction(action)
     }
 
     deinit {
+        Logger.debug("De-initing \(self)")
         unregisterActive()
     }
 }

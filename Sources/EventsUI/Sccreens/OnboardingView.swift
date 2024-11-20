@@ -14,8 +14,7 @@ public struct OnboardingView: View {
     @StateObject public var viewModel: OnboardingViewModel
 
     public var body: some View {
-        content
-            .padding()
+        EventConsumerView(viewModel: viewModel)
     }
 }
 

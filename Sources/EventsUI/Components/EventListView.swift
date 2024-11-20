@@ -9,14 +9,15 @@ import EventsCommons
 import EventsDomain
 import SwiftUI
 
-@MainActor
 public struct EventListView: View {
+    
     @Binding public var events: [Event]
+    
     public var body: some View {
-        ScrollViewReader { @MainActor scrollViewProxy in
+        ScrollViewReader { scrollViewProxy in
             ScrollView {
-                LazyVStack(spacing: 16) {
-                    ForEach(events) { @MainActor event in
+                VStack {
+                    ForEach(events) { event in
                         EventRow(event: event)
                             .padding(.horizontal)
                     }
@@ -33,10 +34,6 @@ public struct EventListView: View {
                     scrollViewProxy.scrollTo("bottom", anchor: .bottom)
                 }
             }
-            .background(Color.dynamicBackground.ignoresSafeArea())
-        }
-        .onAppear {
-            events = []
         }
     }
 }

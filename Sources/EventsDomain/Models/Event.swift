@@ -10,7 +10,7 @@ import Foundation
 
 public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Sendable {
     public var id: String {
-        UUID().uuidString + instanceDescription
+        UUID().uuidString
     }
 
     case idle
@@ -18,13 +18,13 @@ public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Se
     case loading
     case willUpdateState(RegisterState)
     case stateUpdated(RegisterState)
-    case currentState(RegisterState)
+//    case currentState(RegisterState)
     case error(Error)
 
     public var name: String {
-        String(describing: self)
-            .replacingOccurrences(of: "(", with: "")
-            .replacingOccurrences(of: ")", with: "")
+        let mirror = Mirror(reflecting: self)
+        let casename = mirror.children.first?.label
+        return casename ?? String(describing: self)
     }
 
     public static func == (lhrs: Event, rhs: Event) -> Bool {
@@ -37,54 +37,16 @@ public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Se
 
     public var isProcessing: Bool {
         switch self {
-        case .loading: return true
-        case .startProcessing: return true
-        case .willUpdateState: return true
-        default: return false
+        case .stateUpdated, .idle: return false
+        default: return true
         }
     }
 
-    public var isIdle: Bool {
-        self == .idle
-    }
-
-    public var willTransition: Bool {
+    public var simulationDelay: TimeInterval {
         switch self {
-        case .willUpdateState: return true
-        case .stateUpdated: return true
-        default: return false
-        }
-    }
-
-    public var isDone: Bool {
-        if case let .currentState(state) = self,
-            case .done = state
-        {
-            return true
-        }
-        return false
-    }
-
-    public var hasError: Error? {
-        if case let .error(error) = self {
-            return error
-        }
-        return nil
-    }
-
-    public var currentState: RegisterState? {
-        if case let .currentState(state) = self {
-            return state
-        }
-        return nil
-    }
-
-    public var simulationDelay: Int {
-        switch self {
-        case .loading: return 1
-        case .startProcessing: return 0
+        case .loading: return .random(in: 0.5...1.5)
+        case .startProcessing: return .random(in: 0.0...0.5)
         case .willUpdateState: return 0
-        case .currentState: return 0
         case .error: return 0
         case .idle: return 0
         case .stateUpdated: return 0
@@ -105,8 +67,8 @@ public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Se
             return "checkmark.circle"
         case .error:
             return "exclamationmark.triangle"
-        case .currentState:
-            return "stop.circle"
+//        case .currentState:
+//            return "stop.circle"
         }
     }
 }

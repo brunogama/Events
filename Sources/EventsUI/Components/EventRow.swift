@@ -9,7 +9,6 @@ import EventsCommons
 import EventsDomain
 import SwiftUI
 
-@MainActor
 public struct EventRow: View {
     public let event: Event
 
