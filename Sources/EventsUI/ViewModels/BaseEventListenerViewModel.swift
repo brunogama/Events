@@ -34,9 +34,8 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
     }
 
     public func registerActive() {
-//        subscriptionToken?.cancel()
-//        guard subscriptionToken == nil else { return }
-//        Logger.debug("🔌 Registering \(self)")
+        subscriptionToken?.cancel()
+        guard subscriptionToken == nil else { return }
         guard let eventBroadcaster else { return }
         subscriptionToken = eventBroadcaster.subscribe(owner: self) { [weak self] newEvent in
             self?.registerEvent(newEvent)
@@ -56,15 +55,7 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
     private func handleStateTransition(for state: RegisterState) {
         completedStateFlags.insert(state.stateFlag)
 
-        let dependency = state.deferredDependency
-        if case .none = dependency {
-            unregisterActive()
-            return
-        }
-
-        if currentDependency == nil {
-            currentDependency = dependency
-        }
+        currentDependency = state.deferredDependency
 
         if isDependencySatisfied() {
             unregisterActive()
@@ -95,13 +86,18 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
 
     #if DEBUG
         private func logDependencyStatus() {
-            print("Completed states: \(completedStateFlags)")
-            print("Dependencies satisfied: \(isDependencySatisfied())")
+            guard let currentDependency else { return }
+            if case .none = currentDependency {
+                return
+            }
+
+            print("Awaiting \(String(describing: self)) Completed states: \(completedStateFlags)")
+            print("Awaiting Dependencies satisfied: \(isDependencySatisfied())")
         }
     #endif
 
     open func unregisterActive() {
-//        Logger.debug("Unregistering \(self)")
+        Logger.debug("Unregistering \(self)")
         completedStateFlags = []
         currentDependency = nil
         subscriptionToken?.cancel()
@@ -117,7 +113,7 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
     }
 
     deinit {
-        Logger.debug("De-initing \(self)")
+        //        Logger.debug("De-initing \(self)")
         unregisterActive()
     }
 }
