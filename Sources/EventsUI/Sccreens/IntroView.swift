@@ -23,6 +23,5 @@ public class IntroViewModel: BaseEventListenerViewModel {
     public override var title: String { "IntroView" }
     public override var image: String { "sparkles" }
     public override var state: StateFlags { .intro }
-    public override var defferUnsubcription: DeferredDependency { .all([.onboarding, .removeDevices]) }
-    
+    public override var defferUnsubcription: DeferredDependency { .either([.sms], [.done]) }
 }

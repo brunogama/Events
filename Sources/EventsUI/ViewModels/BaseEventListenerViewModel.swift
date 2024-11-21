@@ -75,20 +75,20 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
 
         case .all(let flags):
             let result = flags.rawValue & completedStateFlags.rawValue == flags.rawValue
-            Logger.debug("🎯 All flags in \(type(of: self)) check: required \(flags), have \(completedStateFlags), satisfied: \(result)")
+//            Logger.debug("🎯 All flags in \(type(of: self)) check: required \(flags), have \(completedStateFlags), satisfied: \(result)")
             return result
 
         case .any(let flags):
             let result = (flags.rawValue & completedStateFlags.rawValue) != 0
-            Logger.debug("🎯 Any flags in \(type(of: self)) check: required \(flags), have \(completedStateFlags), satisfied: \(result)")
+//            Logger.debug("🎯 Any flags in \(type(of: self)) check: required \(flags), have \(completedStateFlags), satisfied: \(result)")
             return result
 
         case .either(let flags1, let flags2):
             let result1 = flags1.rawValue & completedStateFlags.rawValue == flags1.rawValue
             let result2 = flags2.rawValue & completedStateFlags.rawValue == flags2.rawValue
-            Logger.debug(
-                "🎯 Either flags in \(type(of: self)) check: required \(flags1) or \(flags2), have \(completedStateFlags), satisfied: \(result1 || result2)"
-            )
+//            Logger.debug(
+//                "🎯 Either flags in \(type(of: self)) check: required \(flags1) or \(flags2), have \(completedStateFlags), satisfied: \(result1 || result2)"
+//            )
             return result1 || result2
         }
     }
