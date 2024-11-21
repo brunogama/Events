@@ -11,6 +11,8 @@ import SwiftUI
 
 public struct RootView: View {
     @State private var navigationPath: [Destination] = []
+    @State private var showBottomSheet = false
+    @State private var currentState: RegisterState?
     private let navigationRouter: NavigationRouter
     @State private var introViewId = UUID()
     @StateObject private var navigationHandler = NavigationObservableDestination()
@@ -34,8 +36,25 @@ public struct RootView: View {
                 )
             }
         }
+        .sheet(
+            isPresented: $showBottomSheet,
+            onDismiss: {
+                showBottomSheet = false
+                navigationHandler.error = nil
+            }
+        ) {
+            if let error = navigationHandler.error {
+                BottomSheetView(error: error)
+                    .presentationDetents([.medium])
+            }
+        }
         .onChange(of: navigationHandler.state) { newState in
             handleNavigationStateChange(newState)
+        }
+        .onChange(of: navigationHandler.error) { _ in
+            if let _ = navigationHandler.error {
+                showBottomSheet = true
+            }
         }
     }
 
@@ -45,7 +64,13 @@ public struct RootView: View {
             return
         default:
             let destination = state.toDestination()
-            handleNavigation(to: destination)
+            if destination == .none {
+                currentState = state
+                showBottomSheet = true
+            }
+            else {
+                handleNavigation(to: destination)
+            }
         }
     }
 
@@ -61,5 +86,34 @@ public struct RootView: View {
                 navigationPath.append(destination)
             }
         }
+    }
+}
+
+struct BottomSheetView: View {
+    let error: Error
+    @Environment(\.dismiss) var dismiss
+
+    var body: some View {
+        VStack {
+            Image(systemName: "exclamationmark.triangle")
+                .font(.system(size: 42))
+                .foregroundColor(.red)
+            Text(error.localizedDescription)
+                .font(.headline)
+                .padding()
+            Spacer()
+
+            Button {
+                dismiss()
+            } label: {
+                Text("Close")
+                    .font(.headline)
+                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: 42, alignment: .center)
+            }
+
+            Color.clear.padding()
+        }
+        .padding()
     }
 }

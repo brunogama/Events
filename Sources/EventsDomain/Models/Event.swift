@@ -18,8 +18,7 @@ public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Se
     case loading
     case willUpdateState(RegisterState)
     case stateUpdated(RegisterState)
-//    case currentState(RegisterState)
-    case error(Error)
+    case error(ValidationError)
 
     public var name: String {
         let mirror = Mirror(reflecting: self)
@@ -37,7 +36,7 @@ public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Se
 
     public var isProcessing: Bool {
         switch self {
-        case .stateUpdated, .idle: return false
+        case .stateUpdated, .idle, .error: return false
         default: return true
         }
     }

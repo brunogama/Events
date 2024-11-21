@@ -38,12 +38,20 @@ public final class EventBroadCoaster {
     }
 
     private func fakeActionProcessing(_ registerState: RegisterState) {
-        let eventsSimulation = [
+        var eventsSimulation = [
             Event.startProcessing,
             .loading,
-            .willUpdateState(registerState),
-            .stateUpdated(registerState),
         ]
+        if Int.random(in: 1...10) > 4 {
+            eventsSimulation += [
+                .willUpdateState(registerState),
+                .stateUpdated(registerState),
+                .stateUpdated(registerState)
+            ]
+        } else {
+            eventsSimulation.append(.error(.empty))
+        }
+        
 
         Task {
             await withTaskGroup(of: Void.self) { group in

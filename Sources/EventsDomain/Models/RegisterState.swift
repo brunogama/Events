@@ -64,14 +64,6 @@ public enum RegisterState: RawRepresentable, Equatable, Hashable, ReflectableDes
         case .email: return .email
         }
     }
-
-    public var deferredDependency: DeferredDependency {
-        switch self {
-        case .onboarding: return .all([.removeDevices, .liveness])
-        default: return .none
-        }
-    }
-
 }
 
 extension RegisterState {
@@ -88,4 +80,5 @@ extension RegisterState {
         }
     }
 }
+
 

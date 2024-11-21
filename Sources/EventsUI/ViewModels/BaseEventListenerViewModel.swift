@@ -47,6 +47,11 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
     open func registerEvent(_ event: Event) {
         self.event = event
         receivedValues.append(event)
+        
+        if case  .error(let error) = event {
+            navigationDestinationObserver.error = error
+            return
+        }
 
         if case .stateUpdated(let newState) = event {
             navigationDestinationObserver.state = newState
