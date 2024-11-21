@@ -57,11 +57,11 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
     private func handleStateTransition(for state: RegisterState) {
         completedStateFlags.insert(state.stateFlag)
 
-        let stateDependency = state.deferredDependency
-
-        #if DEBUG
-            logDependencyStatus(state: state, dependency: stateDependency)
-        #endif
+//        let stateDependency = state.deferredDependency
+//
+//        #if DEBUG
+//            logDependencyStatus(state: state, dependency: stateDependency)
+//        #endif
 
         if isDependencySatisfied() {
             unregisterActive()
@@ -111,7 +111,7 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
     #endif
 
     open func unregisterActive() {
-        Logger.debug("Unregistering \(self)")
+//        Logger.debug("Unregistering \(self)")
         completedStateFlags = []
         subscriptionToken?.cancel()
         subscriptionToken = nil
@@ -126,7 +126,6 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
     }
 
     deinit {
-        //        Logger.debug("De-initing \(self)")
         unregisterActive()
     }
 }

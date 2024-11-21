@@ -41,6 +41,7 @@ public final class EventBroadCoaster {
         let eventsSimulation = [
             Event.startProcessing,
             .loading,
+            .willUpdateState(registerState),
             .stateUpdated(registerState),
         ]
 
@@ -56,7 +57,6 @@ public final class EventBroadCoaster {
                     await group.next()
                 }
             }
-            await Task.delayFor(seconds: 1)
         }
     }
 

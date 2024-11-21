@@ -56,7 +56,10 @@ public struct RootView: View {
             navigationHandler.state = .none
         }
         else {
-            navigationPath.append(destination)
+            Task {
+                await Task.delayFor(for: 0.333)
+                navigationPath.append(destination)
+            }
         }
     }
 }
