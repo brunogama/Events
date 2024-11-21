@@ -21,7 +21,7 @@ public struct EventListView: View {
                         EventRow(event: event)
                             .transition(
                                 .asymmetric(
-                                    insertion: .scale(scale: 0.3)
+                                    insertion: .scale(scale: 0.5)
                                         .combined(with: .opacity)
                                         .combined(with: .move(edge: .bottom)),
                                     removal: .opacity
