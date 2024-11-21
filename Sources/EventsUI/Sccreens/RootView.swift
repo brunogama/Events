@@ -98,6 +98,7 @@ struct BottomSheetView: View {
             Image(systemName: "exclamationmark.triangle")
                 .font(.system(size: 42))
                 .foregroundColor(.red)
+            Spacer()
             Text(error.localizedDescription)
                 .font(.headline)
                 .padding()
@@ -107,12 +108,13 @@ struct BottomSheetView: View {
                 dismiss()
             } label: {
                 Text("Close")
+                    .foregroundColor(.white)
                     .font(.headline)
-                    .padding()
+                    .padding(42)
                     .frame(maxWidth: .infinity, maxHeight: 42, alignment: .center)
+                    .background(Color.red)
+                    .clipShape(RoundedRectangle(cornerRadius: 42 / 4, style: .continuous))
             }
-
-            Color.clear.padding()
         }
         .padding()
     }

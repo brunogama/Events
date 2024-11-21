@@ -43,7 +43,7 @@ public final class EventBroadCoaster {
             .loading,
         ]
         
-        if Int.random(in: 1...10) > 4 {
+        if Int.random(in: 1...10) > 5 {
             eventsSimulation += [
                 .willUpdateState(registerState),
                 .stateUpdated(registerState),
