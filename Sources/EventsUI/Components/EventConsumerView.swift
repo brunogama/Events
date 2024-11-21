@@ -22,14 +22,17 @@ public struct EventConsumerView: View {
                 .titleStyle(with: viewModel.title)
 
             EventListView(
-                events: .constant(viewModel.receivedValues)
+                events: Binding<[Event]>(
+                    get: { viewModel.receivedValues },
+                    set: { viewModel.receivedValues = $0 }
+                    )
             )
 
             Spacer()
 
             LoadingButton(
                 title: viewModel.title,
-                isLoading: .constant(viewModel.event.isProcessing)
+                isLoading: $viewModel.isLoading
             ) {
                 viewModel.buttonTap()
             }

@@ -13,6 +13,7 @@ import Foundation
 open class BaseEventListenerViewModel: EventListenerProtocol {
     @Published public var receivedValues: [Event] = []
     @Published public var event: Event = .idle
+    @Published public var isLoading: Bool = false
     private(set) public var navigationDestinationObserver: NavigationObservableDestination
     public private(set) weak var eventBroadcaster: EventBroadCoaster?
     open var action: Action { .passDone }
@@ -46,9 +47,10 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
 
     open func registerEvent(_ event: Event) {
         self.event = event
+        self.isLoading = event.isProcessing
         receivedValues.append(event)
         
-        if case  .error(let error) = event {
+        if case .error(let error) = event {
             navigationDestinationObserver.error = error
             return
         }

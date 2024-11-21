@@ -52,16 +52,13 @@ public final class EventBroadCoaster {
         } else {
             eventsSimulation.append(.error(.empty))
         }
-        
 
         Task {
             await withTaskGroup(of: Void.self) { group in
                 for event in eventsSimulation {
                     group.addTask {
                         await Task.delayFor(for: event.simulationDelay)
-                        await MainActor.run {
-                            self.emit(event)
-                        }
+                        self.emit(event)
                     }
                     await group.next()
                 }
@@ -86,4 +83,17 @@ public final class EventBroadCoaster {
             token.store(cancellable)
             return token
         }
+}
+
+private extension Event {
+    var simulationDelay: TimeInterval {
+        switch self {
+        case .loading: return .random(in: 0.5...1.5)
+        case .startProcessing: return .random(in: 0.0...0.5)
+        case .willUpdateState: return 0
+        case .error: return 0
+        case .idle: return 0
+        case .stateUpdated: return 0
+        }
+    }
 }

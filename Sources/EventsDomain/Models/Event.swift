@@ -10,9 +10,9 @@ import Foundation
 
 public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Sendable {
     public var id: String {
-        UUID().uuidString
+        "\(instanceDescription)-\(Date().timeIntervalSinceReferenceDate)"
     }
-
+    
     case idle
     case startProcessing
     case loading
@@ -41,17 +41,6 @@ public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Se
         }
     }
 
-    public var simulationDelay: TimeInterval {
-        switch self {
-        case .loading: return .random(in: 0.5...1.5)
-        case .startProcessing: return .random(in: 0.0...0.5)
-        case .willUpdateState: return 0
-        case .error: return 0
-        case .idle: return 0
-        case .stateUpdated: return 0
-        }
-    }
-
     public var icon: String {
         switch self {
         case .idle:
@@ -66,8 +55,6 @@ public enum Event: Hashable, Equatable, ReflectableDescription, Identifiable, Se
             return "checkmark.circle"
         case .error:
             return "exclamationmark.triangle"
-//        case .currentState:
-//            return "stop.circle"
         }
     }
 }

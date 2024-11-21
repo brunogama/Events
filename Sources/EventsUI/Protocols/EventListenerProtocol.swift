@@ -13,6 +13,7 @@ import SwiftUI
 
 public protocol EventListenerProtocol: IdentifiableObservableObjectProtocol {
     var event: Event { get }
+    var isLoading: Bool { get }
     var action: Action { get }
     var receivedValues: [Event] { get set }
     var eventBroadcaster: EventBroadCoaster? { get }
