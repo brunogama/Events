@@ -20,14 +20,10 @@ public struct SMSView: View {
 
 public class SMSViewModel: BaseEventListenerViewModel {
     override public var action: Action { .smsToken(token) }
-
     override public var title: String { "SMSView" }
-
     public var textInputCaption: String { "Type SMS Token" }
-
     override public var image: String { "message.fill" }
-
     public var renderInputTextField: Bool { true }
-
+    public override var state: StateFlags { .sms }
     @Published public var token: String = ""
 }

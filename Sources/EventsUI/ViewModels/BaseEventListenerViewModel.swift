@@ -19,17 +19,17 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
     open var title: String { "" }
     open var buttonTitle: String { "" }
     open var image: String { "" }
+    open var state: StateFlags { .none }
+    open var defferUnsubcription: DeferredDependency { .none }
 
     private var subscriptionToken: SubscriptionToken?
     private var completedStateFlags: StateFlags = []
-    private var currentDependency: DeferredDependency = .none
-    private var originalDefferedFlag: StateFlags = .none
+    private var originalDefferedFlag: StateFlags = .intro
 
     public init(
         eventBroadcaster: EventBroadCoaster,
         navigationDestinationObserver: NavigationObservableDestination
     ) {
-        //        Logger.debug("Initing \(type(of: self))")
         self.navigationDestinationObserver = navigationDestinationObserver
         self.eventBroadcaster = eventBroadcaster
         registerActive()
@@ -63,38 +63,27 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
             logDependencyStatus(state: state, dependency: stateDependency)
         #endif
 
-        if currentDependency == .none && stateDependency != .none && state.stateFlag != .none
-            && originalDefferedFlag == .none
-        {
-            originalDefferedFlag = state.stateFlag
-            currentDependency = stateDependency
-            Logger.debug("📍 Setting initial dependency: \(stateDependency) for \(type(of: self))")
-        }
-
         if isDependencySatisfied() {
             unregisterActive()
         }
     }
 
     private func isDependencySatisfied() -> Bool {
-        switch currentDependency {
+        switch defferUnsubcription {
         case .none:
             return true
 
         case .all(let flags):
-            // Check if ALL bits in flags are present in completedStateFlags
             let result = flags.rawValue & completedStateFlags.rawValue == flags.rawValue
             Logger.debug("🎯 All flags in \(type(of: self)) check: required \(flags), have \(completedStateFlags), satisfied: \(result)")
             return result
 
         case .any(let flags):
-            // Check if ANY bits in flags are present in completedStateFlags
             let result = (flags.rawValue & completedStateFlags.rawValue) != 0
             Logger.debug("🎯 Any flags in \(type(of: self)) check: required \(flags), have \(completedStateFlags), satisfied: \(result)")
             return result
 
         case .either(let flags1, let flags2):
-            // Check if EITHER complete set of bits is present
             let result1 = flags1.rawValue & completedStateFlags.rawValue == flags1.rawValue
             let result2 = flags2.rawValue & completedStateFlags.rawValue == flags2.rawValue
             Logger.debug(
@@ -124,7 +113,6 @@ open class BaseEventListenerViewModel: EventListenerProtocol {
     open func unregisterActive() {
         Logger.debug("Unregistering \(self)")
         completedStateFlags = []
-        currentDependency = .none
         subscriptionToken?.cancel()
         subscriptionToken = nil
     }

@@ -22,5 +22,5 @@ public class OnboardingViewModel: BaseEventListenerViewModel {
     override public var action: Action { .passOnboarding }
     override public var title: String { "OnboardingView" }
     override public var image: String { "person.crop.circle.badge.checkmark" }
-    public var renderInputTextField: Bool { false }
+    public override var state: StateFlags { .onboarding }
 }

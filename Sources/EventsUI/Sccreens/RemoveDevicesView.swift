@@ -22,4 +22,5 @@ public class RemoveDevicesViewModel: BaseEventListenerViewModel {
     override public var action: Action { .removeDevices(.mock()) }
     override public var title: String { "RemoveDevicesView" }
     override public var image: String { "xmark.circle.fill" }
+    public override var state: StateFlags { .removeDevices }
 }

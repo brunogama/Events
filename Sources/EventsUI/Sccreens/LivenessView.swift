@@ -22,4 +22,5 @@ public class LivenessViewModel: BaseEventListenerViewModel {
     override public var action: Action { .starLiveness }
     override public var title: String { "LivenessView" }
     override public var image: String { "eye.fill" }
+    public override var state: StateFlags { .liveness }
 }

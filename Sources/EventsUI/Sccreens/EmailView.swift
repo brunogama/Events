@@ -20,10 +20,8 @@ public struct EmailView: View {
 
 public class EmailViewModel: SMSViewModel {
     override public var action: Action { .emailToken(token) }
-
     override public var title: String { "EmailView" }
-
     override public var textInputCaption: String { "Type SMS Token" }
-
     override public var image: String { "envelope.fill" }
+    public override var state: StateFlags { .email }
 }

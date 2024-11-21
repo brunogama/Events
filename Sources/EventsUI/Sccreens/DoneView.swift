@@ -20,8 +20,7 @@ public struct DoneView: View {
 
 public class DoneViewModel: BaseEventListenerViewModel {
     override public var action: Action { .passDone }
-
     override public var title: String { "DoneView" }
-
     override public var image: String { "checkmark.circle.fill" }
+    public override var state: StateFlags { .done}
 }
