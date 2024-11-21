@@ -53,6 +53,7 @@ public struct RootView: View {
         if destination == .onboarding && navigationPath.contains(.onboarding) {
             navigationPath.removeAll()
             introViewId = UUID()
+            navigationHandler.state = .none
         }
         else {
             navigationPath.append(destination)
