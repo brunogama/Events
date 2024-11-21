@@ -42,6 +42,7 @@ public final class EventBroadCoaster {
             Event.startProcessing,
             .loading,
         ]
+        
         if Int.random(in: 1...10) > 4 {
             eventsSimulation += [
                 .willUpdateState(registerState),
