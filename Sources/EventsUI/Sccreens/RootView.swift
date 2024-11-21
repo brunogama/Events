@@ -12,6 +12,7 @@ import SwiftUI
 public struct RootView: View {
     @State private var navigationPath: [Destination] = []
     private let navigationRouter: NavigationRouter
+    @State private var introViewId = UUID()
     @StateObject private var navigationHandler = NavigationObservableDestination()
 
     public init(navigationRouter: NavigationRouter) {
@@ -24,6 +25,7 @@ public struct RootView: View {
                 navigationRouter: navigationRouter,
                 navigationHandler: navigationHandler
             )
+            .id(introViewId)
             .navigationDestination(for: Destination.self) { destination in
                 DestinationViewContainer(
                     destination: destination,
@@ -50,6 +52,7 @@ public struct RootView: View {
     private func handleNavigation(to destination: Destination) {
         if destination == .onboarding && navigationPath.contains(.onboarding) {
             navigationPath.removeAll()
+            introViewId = UUID()
         }
         else {
             navigationPath.append(destination)

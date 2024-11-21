@@ -33,9 +33,7 @@ public enum RegisterState: RawRepresentable, Equatable, Hashable, ReflectableDes
     }
 
     public var name: String {
-        String(describing: self)
-            .replacingOccurrences(of: "(", with: "")
-            .replacingOccurrences(of: ")", with: "")
+        Mirror(reflecting: self).children.first?.label ?? String(describing: self)
     }
 
     public static func == (lhs: RegisterState, rhs: RegisterState) -> Bool {
@@ -69,7 +67,7 @@ public enum RegisterState: RawRepresentable, Equatable, Hashable, ReflectableDes
 
     public var deferredDependency: DeferredDependency {
         switch self {
-        case .liveness: return .all([.sms, .email])
+        case .onboarding: return .all([.removeDevices, .liveness])
         default: return .none
         }
     }
@@ -108,7 +106,7 @@ public struct StateFlags: OptionSet {
     public static let email = StateFlags(rawValue: 1 << 7)
 }
 
-public enum DeferredDependency {
+public enum DeferredDependency: Equatable {
     case all(StateFlags)
     case any(StateFlags)
     case either(StateFlags, StateFlags)
