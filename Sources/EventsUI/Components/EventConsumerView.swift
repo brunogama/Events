@@ -33,7 +33,7 @@ public struct EventConsumerView: View {
             ) {
                 viewModel.buttonTap()
             }
-        }
+        }.navigationTitle(viewModel.title)
     }
 }
 
