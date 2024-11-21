@@ -52,8 +52,8 @@ public struct RootView: View {
     private func handleNavigation(to destination: Destination) {
         if destination == .onboarding && navigationPath.contains(.onboarding) {
             navigationPath.removeAll()
-            introViewId = UUID()
             navigationHandler.state = .none
+            introViewId = UUID()
         }
         else {
             Task {
