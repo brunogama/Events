@@ -14,26 +14,30 @@ public struct EventListView: View {
     @Binding public var events: [Event]
     
     public var body: some View {
-        ScrollViewReader { scrollViewProxy in
-            ScrollView {
-                VStack {
-                    ForEach(events) { event in
+        ScrollViewReader { proxy in
+            ScrollView(.vertical, showsIndicators: true) {
+                VStack(spacing: 10) {
+                    ForEach(Array(events.enumerated()), id: \.offset) { _, event in
                         EventRow(event: event)
+                            .transition(
+                                .asymmetric(
+                                    insertion: .scale(scale: 0.3)
+                                        .combined(with: .opacity)
+                                        .combined(with: .move(edge: .bottom)),
+                                    removal: .opacity
+                                )
+                            )
                             .padding(.horizontal)
                     }
-
-                    Color.clear
-                        .frame(height: 1)
-                        .id("bottom")
                 }
                 .padding(.vertical)
-                .onAppear {
-                    scrollViewProxy.scrollTo("bottom", anchor: .bottom)
-                }
-                .onChange(of: events, initial: true) {
-                    scrollViewProxy.scrollTo("bottom", anchor: .bottom)
+                .onChange(of: events.count) { _ in
+                    withAnimation(.easeOut(duration: 0.5)) {
+                        proxy.scrollTo(events.count - 1, anchor: .bottom)
+                    }
                 }
             }
         }
+        .animation(.spring(response: 0.5, dampingFraction: 0.7), value: events.count)
     }
 }
