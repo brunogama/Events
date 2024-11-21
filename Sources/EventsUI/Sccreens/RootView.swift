@@ -63,32 +63,3 @@ public struct RootView: View {
         }
     }
 }
-
-private struct IntroViewContainer: View {
-    let navigationRouter: NavigationRouter
-    let navigationHandler: NavigationObservableDestination
-
-    var body: some View {
-        AnyView(
-            navigationRouter.navigateTo(
-                .intro,
-                navigationObservableDestination: navigationHandler
-            )
-        )
-    }
-}
-
-private struct DestinationViewContainer: View {
-    let destination: Destination
-    let navigationRouter: NavigationRouter
-    let navigationHandler: NavigationObservableDestination
-
-    var body: some View {
-        AnyView(
-            navigationRouter.navigateTo(
-                destination,
-                navigationObservableDestination: navigationHandler
-            )
-        )
-    }
-}

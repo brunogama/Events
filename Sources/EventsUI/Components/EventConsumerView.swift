@@ -4,7 +4,10 @@
 //
 //  Created by Bruno on 20/11/24.
 //
+
 import SwiftUI
+import EventsDomain
+import EventsCommons
 
 public struct EventConsumerView: View {
     @ObservedObject var viewModel: BaseEventListenerViewModel
